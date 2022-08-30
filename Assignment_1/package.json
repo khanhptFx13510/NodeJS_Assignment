@@ -1,0 +1,11 @@
+{
+  "name": "khanhptfx_15310",
+  "version": "1.0.0",
+  "description": "assignment_1 NodeJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "khanhptfx_15310",
+  "license": "ISC"
+}
