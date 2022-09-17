@@ -1,0 +1,18 @@
+.indigo-400{
+   background-color: #6710f28a;
+}
+
+a{
+   color: #0dfdfd;
+}
+a:hover{
+   color: #fd0db3;
+}
+
+.title-color{
+   color: #0dfdfd;
+}
+
+select{
+   width: 100%;
+}
