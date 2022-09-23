@@ -14,5 +14,9 @@ a:hover{
 }
 
 select{
-   width: 100%;
+   height: 1.5;
+}
+/* table CSS */
+table{
+   text-align: center;
 }

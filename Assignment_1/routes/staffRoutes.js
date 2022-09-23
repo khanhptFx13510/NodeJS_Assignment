@@ -5,6 +5,7 @@ const router = express.Router();
 
 // homepage
 router.get('/', staffController.getStaff);
+
 router.post('/', staffController.postStaffWork);   
 
 router.get('/profile', (req, res, next) => {

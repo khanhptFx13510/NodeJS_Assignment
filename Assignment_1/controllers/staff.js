@@ -3,15 +3,16 @@ const rootDir =require('path').dirname(process.mainModule.filename);
 const Staff = require('../model/staff');
 
 exports.getStaff = (req, res, next) => {
-   const staff = Staff.findById('631e91b269ba3974a72651c9')
+   const status = req.query.statusWorking
+   console.log("status dong 7: " , status);
+
+   Staff.findById('631e91b269ba3974a72651c9')
       .then((staff) => {
-         staff.dOB = new Date("1992-9-16");
-         staff.startDate = new Date("2022-9-12");
-         staff.save();
          res.render('index', {
             props : staff,
-            pageTitle: staff.name,
-            path: '/'
+            workPlace: staff.workPlace,
+            path: '/',
+            statusWorking: status ? status : false
          });
       })
    // res.sendFile(path.join(__dirname, '../views/index.html'));
@@ -21,42 +22,27 @@ exports.postStaffWork = (req, res, next) => {
    const startWork = req.body.startWork;
    const staffId = req.body.staffId;
    const endWork = req.body.endWork;
-   console.log("startWork", startWork);
-   console.log("staffId: ", staffId);
-   console.log("endWork: ", endWork);
+   const workPlace = req.body.workPlace;
+   const status = req.query.statusWorking
+   console.log("status" , status);
 
-   if(startWork){
-      Staff.findById(staffId)
-         .then(staff => {
-            staff.workOnDay.push({
-               beginWork: new Date()
+   Staff.findById(staffId)
+      .then(staff => {
+         if(startWork){
+            staff.addWorkOnDay({
+               startWork: startWork,
+               isNew: true,
+               workPlace: workPlace,
             })
-            console.log(staff.workOnDay);
-            console.log(staff.workOnDay.length);
-         })
-         .then(result => {
-            res.redirect('/');
-         })
-   }else if(endWork){
-      Staff.findById(staffId)
-         .then(staff => {
-            console.log("endWork: ",endWork);
-            staff.workOnDay.push({
-               endWork: new Date()
+         } 
+         else if(endWork){
+            staff.addWorkOnDay({
+               endWork: endWork,
+               isNew: false
             })
-            console.log(staff.workOnDay);
-            console.log(staff.workOnDay[0].endWork);
-         })
-         .then(result => {
-            res.redirect('/');
-         })
-   }
-   // Staff.findById(staffId)
-   //    .then(staff =>{
-   //       return req.staff.addWorkOnDay(staff);
-   //    })
-   //    .then(result => {
-   //       console.log(result);
-   //       res.redirect('/');
-   //    })
+         }
+      })
+      .then(result => {
+         res.redirect('/?statusWorking=true');
+      })
 }
