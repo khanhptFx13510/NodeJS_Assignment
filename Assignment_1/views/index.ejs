@@ -16,16 +16,18 @@
 
                <!-- Apply to join work and post into server -->
                <button style="width: 100%" class="btn btn-primary my-2"
-                  onclick= "showFunction()"
+                  onclick= "showDetailsApply()"
                >
                   Apply Work
                </button>
-               
+
+               <!-- Work content -->
                <div id="contentApply" 
-                  style=<%= statusWorking == "true" ? 
-                     "visibility : visible;" : 
-                     "visibility : hidden;" 
-                  %> 
+                  style=<% if (isShowInfor == "true") { %>
+                     "visibility: visible"
+                  <% } else { %>
+                     "visibility: hidden"
+                  <% } %>
                >
                   <!-- submit Staff to server -->
                   <form action="/" method="POST">
@@ -39,16 +41,29 @@
                            <option value="Home">Home</option>
                         </select>
    
-                        <button class="btn my-2 col-4 btn-primary" type="submit"
-                           
+                        <button type="submit" 
+                           class="btn my-2 col-4 <% if(statusWorking == 'true'){ %>
+                              btn-danger
+                           <% } else { %>
+                              btn-primary
+                           <% } %>"                
                         >
-                           <a style="visibility: hidden" href="localhost:3001/?statusWorking=true"></a>
+                           <% if(statusWorking == 'true'){ %>
+                              End Work
+                           <% } else { %>
+                              Start Work
+                           <% } %>
                         </button>
-
-                        <input type="hidden" name="startWork" value="<%= new Date() %>" />
+                        <!-- value submit -->
+                        <input type="hidden" name=<% if(statusWorking == 'true'){ %>
+                              "endWork"
+                           <% } else { %>
+                              "startWork" 
+                           <% } %>
+                           value="<%= new Date() %>" 
+                        />
                         <input type="hidden" name="staffId" value="<%= props._id %>" />
                      </div>
-                     
                   </form>
                   <table id="table" class="table">
                      <thead>
@@ -91,37 +106,76 @@
                                     <h6>Working</h6>
                                  <% } %>
                               </td>
-                              <!-- Working Status -->
+                              <!-- Working Time -->
                               <td>
                                  <% if(staff.endWork) { %>
-                                    <%= new Date().getHours() %>
+                                    <%= new Date(
+                                       new Date(staff.endWork).getTime() - 
+                                       new Date(staff.beginWork).getTime()
+                                       ).getMinutes()
+                                    %>
                                  <% } else { %>
                                     <h6>Working</h6>
                                  <% } %>
                               </td>
                            </tr>                          
                         <% }) %> 
-
                      </tbody>
+                     <tr class="tr">
+                        <th>
+                           Total time worked:
+                        </th>
+                        <th>
+
+                        </th>
+                     </tr>
                   </table>
-                  <form action="/" method="POST">
-                     <button class="btn btn-primary my-2">
-                        Finish Work
-                     </button>
-                     <input type="hidden" name="endWork" value="<%= new Date() %>" />
-                     <input type="hidden" name="staffId" value="<%= props._id %>" />
-                  </form>
                   
                </div>
             </div>
             <!-- Take Break Work -->
-            <div>
-               <button class="btn btn-primary my-2">
-                  Take a leave work
-               </button>
-               <form action="/break" method="POST">
+            <div class="row justify-content-center">
+               <div class="col-8">
+                  <button style="width: 100%;" class="btn btn-primary my-2" 
+                     onclick="showDetailsAnnual()"
+                  >
+                     Take a leave work
+                  </button>
+                  <!-- Form check submit -->
+                  <form style="display: block" id="contentAnnualLeave" 
+                  onsubmit="return submitAnnualLeave('<%= props.annualLeave.remainingDays %>')" action="/annualLeave" method="POST" >
+                     <!-- choose annual break date -->
+                     <div class="form-group">
+                        <label for="datepicker">
+                           <h5>-Select your break date:</h5>
+                        </label>
+                        <input type="text" class="form-control" id="datepicker" name="datePicker" placeholder="Select date" 
+                        required/>
+                       
+                     </div>
+                     <div class="form-group">
+                        <label for="timeAnnual">
+                           <h5>-Select hours break on date:</h5>
+                        </label>
+                        <input type="number" class="form-control" id="timeAnnual" name="timeAnnual" value="8" 
+                        />
+                     </div>
+                     <div class="form-group">
+                        <label class=""><h5>-Reason break:</h5></label>
+                        <textarea class="form-control" id="reason" name="reason"></textarea>
+                     </div>
+                     <div class="form-group">
+                        <h5>
+                           -Remaining days off: 
+                           <%= props.annualLeave.remainingDays %> days
+                        </h5>
+                     </div>
 
-               </form>
+                     <p class="error" style="color: red;"></p>
+                     <input type="hidden" name="staffId" value="<%= props._id %>" />
+                     <button type="submit" class="btn btn-primary">Submit Annual Leave</button>
+                  </form>
+               </div>              
             </div>
          </div>
       </div>

@@ -18,9 +18,13 @@ const staffSchema = new Schema({
       type: String,
       require: true
    },
-   annualLeave :{
-      type: Number,
-      require: true
+   annualLeave: {
+      remainingDays: Number,
+      daysOffId: {
+         type: Schema.Types.ObjectId,
+         ref: 'dateOff',
+         require: true
+      }
    },
    department :{
       type: String,
@@ -60,11 +64,21 @@ staffSchema.methods.addWorkOnDay = function(item){
 
       this.workOnDay = workOnDay;
       // this.save();
-      console.log(this.workOnDay);
+      // console.log(this.workOnDay);
    } else {
-      // workOnDay[workOnDay.length-1].endWork = item.endWork;
+      workOnDay[workOnDay.length-1].endWork = item.endWork;
       // this.save();
-      console.log(this);
    }
-}
+};
+
+staffSchema.methods.addDateOffId = function(dateOff){
+   if(!isNaN(dateOff)){
+      console.log(dateOff);
+   }else{
+      console.log("Not Number")
+   }
+   this.annualLeave = {...this.annualLeave , daysOffId: dateOff._id};
+   // this.save();
+};
+
 module.exports = mongoose.model('Staff' , staffSchema);
