@@ -1,10 +1,10 @@
 // show Content when push apply button
 function showDetailsApply () {
    let contentApply = document.getElementById("contentApply");
-   if(contentApply.style.visibility === "hidden" ){
-      contentApply.style.visibility = "visible";
+   if(contentApply.style.display === "none"){
+      contentApply.style.display = "block";
    } else {
-      contentApply.style.visibility = "hidden";
+      contentApply.style.display = "none";
    }
 }
 
@@ -39,18 +39,41 @@ function submitAnnualLeave(remainingDays){
    let numberOfTime = $("#timeAnnual").val();
    
    let totalDayOff = (numberOfDays * Number(numberOfTime)) / 8;
-   if(Number(remainingDays) < totalDayOff){
+   if(Number(remainingDays) === 0){
+      $("#datepicker").val("") ;
+      $("#timeAnnual").val("8") ;
+      $(".error")[0].innerHTML = "Bạn đã hết ngày nghỉ";
+      return false;
+   }else if(Number(remainingDays) < totalDayOff){
       $("#datepicker").val("") ;
       $("#timeAnnual").val("8") ;
       $(".error")[0].innerHTML = "Tổng thời gian đăng kí nghỉ nhiều hơn thời gian nghỉ còn lại của bạn. Vui lòng nhập lại!";
       return false;
-   } else{
+   } else {
       return true;
    }
 }
-
 
 // date-picker Select multiple days
 $(document).ready(function() {
    $("#datepicker").multiDatesPicker();
 });
+
+
+// Profile Page
+function openChangeImage() {
+   let changeImage = document.getElementById("changeImage");
+   if(changeImage.style.display === "none" ){
+      changeImage.style.display = "block";
+   } else {
+      changeImage.style.display = "none";
+   }
+   
+}
+
+function handleImageChange(input){
+   const showImage = document.getElementById("view");
+   console.log(showImage);
+   const valueInput = input.value;
+   showImage.src = valueInput
+}

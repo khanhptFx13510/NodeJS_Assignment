@@ -8,7 +8,7 @@
          <div class="row">
             <!-- image -->
             <div class="col-4 py-2">
-               <img width="100%" src="https://vnn-imgs-f.vgcloud.vn/2020/08/23/11/dien-vien-anh-thu-tiet-lo-nguyen-nhan-ly-hon-chong-cu.jpg" alt="">
+               <img width="100%" src=<%= props.image %> alt="">
             </div>
 
             <!-- main content -->
@@ -24,9 +24,9 @@
                <!-- Work content -->
                <div id="contentApply" 
                   style=<% if (isShowInfor == "true") { %>
-                     "visibility: visible"
+                     "display: block"
                   <% } else { %>
-                     "visibility: hidden"
+                     "display: none"
                   <% } %>
                >
                   <!-- submit Staff to server -->
@@ -65,6 +65,7 @@
                         <input type="hidden" name="staffId" value="<%= props._id %>" />
                      </div>
                   </form>
+                  <!-- table -->
                   <table id="table" class="table">
                      <thead>
                         <tr class="tr">
@@ -142,7 +143,7 @@
                      Take a leave work
                   </button>
                   <!-- Form check submit -->
-                  <form style="display: block" id="contentAnnualLeave" 
+                  <form style="display: none" id="contentAnnualLeave" 
                   onsubmit="return submitAnnualLeave('<%= props.annualLeave.remainingDays %>')" action="/annualLeave" method="POST" >
                      <!-- choose annual break date -->
                      <div class="form-group">
@@ -171,8 +172,15 @@
                         </h5>
                      </div>
 
-                     <p class="error" style="color: red;"></p>
+                     <p class="error" style="color: red;">
+                        <% if(notifi) { %>                     
+                           <%= notifi %>
+                        <% } else { %>
+                           
+                        <% } %>
+                     </p>
                      <input type="hidden" name="staffId" value="<%= props._id %>" />
+                     <input type="hidden" name="status" value="<%= statusWorking %>" />
                      <button type="submit" class="btn btn-primary">Submit Annual Leave</button>
                   </form>
                </div>              

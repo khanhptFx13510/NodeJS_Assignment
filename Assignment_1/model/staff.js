@@ -63,22 +63,34 @@ staffSchema.methods.addWorkOnDay = function(item){
       });
 
       this.workOnDay = workOnDay;
-      // this.save();
-      // console.log(this.workOnDay);
+      this.save();
    } else {
       workOnDay[workOnDay.length-1].endWork = item.endWork;
-      // this.save();
+      this.save();
    }
 };
 
 staffSchema.methods.addDateOffId = function(dateOff){
-   if(!isNaN(dateOff)){
-      console.log(dateOff);
+   if(isNaN(dateOff) === false){
+      this.annualLeave = {...this.annualLeave , remainingDays: dateOff};
+      this.save();
+
    }else{
-      console.log("Not Number")
+      const timeOff = dateOff.dateOff[dateOff.dateOff.length - 1].time;
+      const daysOff = dateOff.dateOff[dateOff.dateOff.length - 1].days.length;
+      // tong so thời gian nghi doi ra ngay
+      const totalDayOff = (daysOff * timeOff) / 8
+   
+      const remainingDays =this.annualLeave.remainingDays - totalDayOff;
+
+      this.annualLeave = {daysOffId: dateOff._id , remainingDays: remainingDays};
+      this.save();
    }
-   this.annualLeave = {...this.annualLeave , daysOffId: dateOff._id};
-   // this.save();
 };
 
+// Page Profile methods
+staffSchema.methods.changeImage = function(newImg){
+   this.image = newImg;
+   this.save();
+}
 module.exports = mongoose.model('Staff' , staffSchema);

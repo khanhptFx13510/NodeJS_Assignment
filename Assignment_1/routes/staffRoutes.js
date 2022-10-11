@@ -10,9 +10,8 @@ router.post('/', staffController.postStaffWork);
 router.post('/annualLeave', staffController.postAnnualLeave);
 
 // page 2 Profile
-router.get('/profile', (req, res, next) => {
-   res.send("<h1>views 2 profile stafff</h1>");
-});
+router.get('/profile', staffController.profile);
+router.post('/profile', staffController.postImageProfile);
 
 // page 3 salary
 router.get('/salary' , (req, res, next) => {
