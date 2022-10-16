@@ -1,3 +1,4 @@
+// View page 1 Home page
 // show Content when push apply button
 function showDetailsApply () {
    let contentApply = document.getElementById("contentApply");
@@ -24,11 +25,23 @@ function calculate(){
    let tBody = table.tBodies[0]
    let total = 0;
    
-   for(let i=0; i<tBody.rows.length; i++){
-      // console.log(table.tBodies[1].rows[0].cells[1]);
-      total += Number(tBody.rows[i].cells[5].innerHTML)
-   }
-   table.tBodies[1].rows[0].cells[1].innerHTML = `${total} minutes`;
+   for(let i=0; i< tBody.rows.length; i++){
+      // console.log(tBody.rows[i].cells[5].innerText);
+      let splitTime = tBody.rows[i].cells[5].innerText
+         .replace("s" ,"")
+         .split(":");
+      let TimeToSeconds = Number(splitTime[0]) * 60 * 60 +
+                           Number(splitTime[1]) * 60 + 
+                           Number(splitTime[2]);
+
+      total += TimeToSeconds;
+   };
+   
+   let seconds = Math.floor(total % 60);
+   let minutes = Math.floor((total / 60) % 60);
+   let hours = Math.floor((total / (60 * 60)) % 24);
+
+   table.tBodies[1].rows[0].cells[1].innerHTML = hours + ":" + minutes + ":" + seconds + "s";
 }
 
 window.onload = calculate();
@@ -60,7 +73,7 @@ $(document).ready(function() {
 });
 
 
-// Profile Page
+// Profile Page ---------------------------------
 function openChangeImage() {
    let changeImage = document.getElementById("changeImage");
    if(changeImage.style.display === "none" ){

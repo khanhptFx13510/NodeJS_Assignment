@@ -88,7 +88,7 @@ staffSchema.methods.addDateOffId = function(dateOff){
    }
 };
 
-// Page Profile methods
+// ------------------Page 2 Profile methods
 staffSchema.methods.changeImage = function(newImg){
    this.image = newImg;
    this.save();

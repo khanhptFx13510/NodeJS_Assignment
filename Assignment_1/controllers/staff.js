@@ -6,12 +6,19 @@ const { userInfo } = require('os');
 
 exports.getStaff = (req, res, next) => {
    const isShowInfor = req.query.isShowInfor
-   const statusWorking = req.query.statusWorking
+   let statusWorking = req.query.statusWorking
 
    Staff.findById('631e91b269ba3974a72651c9')
       .then((staff) => {
          // staff.annualLeave.remainingDays = 4;
          // staff.save();
+
+         if(statusWorking === undefined){
+            if(staff.workOnDay[staff.workOnDay.length - 1].endWork === undefined){
+               statusWorking = true;
+            }
+         }
+
          res.render('index', {
             props : staff,
             path: '/',
@@ -120,10 +127,163 @@ exports.profile = (req, res, next) => {
          });
       });     
 }
-
+   // Change Image Profile
 exports.postImageProfile = function(req, res, next){
    const newImage = req.body.image;
    req.staff.changeImage(newImage);
-   res.redirect('/profile')
+   res.redirect('/profile');
 }
+
+// Controller page 3 salary
+exports.getSalary = function(req, res, next){
+   // create an object that stores data by month and day
+   let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
+
+   // sap xep ngay dang ki nghi theo thang
+   let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"9":[] ,"10":[] ,"11":[] ,"12":[] };
+
+   // Merge Populate Annual Leave into Staff
+   DateOff.findOne()
+      .populate("staffId")
+      .then((staff) => {
+         const workOnDay = staff.staffId.workOnDay;
+         // filter follow month in year
+         for(e of workOnDay){
+            let dayKey = new Date(e.beginWork).getDate();
+            // January
+            if(new Date(e.beginWork).getMonth() === 0){
+               if(dayKey in monthInYear[1]){
+                  monthInYear[1][dayKey].push(e);
+               } else{
+                  monthInYear[1][dayKey] = [e];
+               }
+            }
+            // February
+            if(new Date(e.beginWork).getMonth() === 1){
+
+               if(dayKey in monthInYear[2]){
+                  monthInYear[2][dayKey].push(e);
+               } else{
+                  monthInYear[2][dayKey] = [e];
+               }
+            }
+            // March
+            if(new Date(e.beginWork).getMonth() === 2){
+
+               if(dayKey in monthInYear[3]){
+                  monthInYear[3][dayKey].push(e);
+               } else{
+                  monthInYear[3][dayKey] = [e];
+               }
+            }
+            // April
+            if(new Date(e.beginWork).getMonth() === 3){
+
+               if(dayKey in monthInYear[4]){
+                  monthInYear[4][dayKey].push(e);
+               } else{
+                  monthInYear[4][dayKey] = [e];
+               }
+            }
+            // May
+            if(new Date(e.beginWork).getMonth() === 4){
+
+               if(dayKey in monthInYear[5]){
+                  monthInYear[5][dayKey].push(e);
+               } else{
+                  monthInYear[5][dayKey] = [e];
+               }
+            }
+            // June
+            if(new Date(e.beginWork).getMonth() === 5){
+
+               if(dayKey in monthInYear[6]){
+                  monthInYear[6][dayKey].push(e);
+               } else{
+                  monthInYear[6][dayKey] = [e];
+               }
+            }
+            // July
+            if(new Date(e.beginWork).getMonth() === 6){
+
+               if(dayKey in monthInYear[7]){
+                  monthInYear[7][dayKey].push(e);
+               } else{
+                  monthInYear[7][dayKey] = [e];
+               }
+            }
+            // August
+            if(new Date(e.beginWork).getMonth() === 7){
+
+               if(dayKey in monthInYear[8]){
+                  monthInYear[8][dayKey].push(e);
+               } else{
+                  monthInYear[8][dayKey] = [e];
+               }
+            }
+            // September
+            if(new Date(e.beginWork).getMonth() === 8){
+
+               if(dayKey in monthInYear[9]){
+                  monthInYear[9][dayKey].push(e);
+               } else{
+                  monthInYear[9][dayKey]= [e]
+               }
+            }
+            // October
+            if(new Date(e.beginWork).getMonth() === 9){
+
+               if(dayKey in monthInYear[10]){
+                  monthInYear[10][dayKey].push(e);
+               } else{
+                  monthInYear[10][dayKey] = [e];
+               }
+            }
+            // November
+            if(new Date(e.beginWork).getMonth() === 10){
+
+               if(dayKey in monthInYear[11]){
+                  monthInYear[11][dayKey].push(e);
+               } else{
+                  monthInYear[11][dayKey] = [e];
+               }
+            }
+            // December
+            if(new Date(e.beginWork).getMonth() === 11){
+
+               if(dayKey in monthInYear[12]){
+                  monthInYear[12][dayKey].push(e);
+               } else{
+                  monthInYear[12][dayKey] = [e];
+               }
+            }
+         };
+
+         // filter annualLeave follow month
+         const dateOff = staff.dateOff;
+         for(e of dateOff){
+            let splitDay = e.days[0].split("/");
+            annualLeave[splitDay[0]].push(e);            
+         }
+         
+         res.render('salary', {
+            props: staff.staffId,
+            path: '/salary',
+            data: monthInYear,
+            annualLeave: annualLeave     
+         });
+      });
+}
+
+// Controller page 4 information Covid-19
+exports.getInfoCovid = function(req, res, next){
+   Staff.findById('631e91b269ba3974a72651c9')
+      .then((staff) => {
+         res.render('covid', {
+            props : staff,
+            path: '/covid',            
+         });
+      });
+}
+
 

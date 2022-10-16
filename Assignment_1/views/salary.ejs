@@ -6,73 +6,54 @@
    <main>
       <div class="container">
          <div class="row">
-            <!-- image -->
-            <div class="col-4 py-2">
-               <img width="100%" src=<%= props.image %> alt="">
-            </div>
-            <!-- main content -->
-            <div class="col-8">
-               <h3 class="my-2" style="text-align: center;">Your Personal Information</h3>
-               <hr style="FONT-WEIGHT: 600; margin: 0; opacity: 1;"/>
-               <table class="table">
-                     <tr class="tr">
-                        <th>Name:</th>
-                        <th><%= props.name %></th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Staff ID:</th>
-                        <td><%= props._id %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Day of birth:</th>
-                        <th>
-                           <%= new Date(props.dOB).getDate() %>/
-                           <%= new Date(props.dOB).getMonth() %>/
-                           <%= new Date(props.dOB).getFullYear() %>
-                        </th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Salary Scale:</th>
-                        <td><%= props.salaryScale %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Start Date:</th>
-                        <th>
-                           <%= new Date(props.startDate).getDate() %>/
-                           <%= new Date(props.startDate).getMonth() %>/
-                           <%= new Date(props.startDate).getFullYear() %>
-                        </th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Department: </th>
-                        <td><%= props.department %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Annual Leave:</th>
-                        <th><%= props.annualLeave.remainingDays %> days</th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Image Profile:</th>
-                        <td><%= props.image %></td>
-                     </tr>
-               </table>
+            <h3 style="text-align:center; color: white ; background-color: green; margin: 2px 0">Detailed Information Sheet</h3>
 
-               <button style="width: 100%" class="btn btn-primary my-2"
-               onclick="openChangeImage()">
-                  Change Profile Image
-               </button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               January</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)" >
+               February</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               March</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               April</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               May</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               June</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               July</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               August</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               September</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               October</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               November</button>
+            <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+               December</button>
 
-               <form id="changeImage" style="display: none" action="/profile" method="POST">
-                  <div class="form-group">
-                     <label for="image"><h5>Your New Image:</h5></label>
-                     <input class="form-control" type="text" name="image" 
-                     onchange="handleImageChange(this)" />
-                  </div>
-                  <button class="btn btn-primary my-2" type="submit">Update</button>
-               </form>
-               <img src="" id="view" width="300"/>
-            </div>
-         </div>
+            <hr style="FONT-WEIGHT: 600; margin: 2px 0 0 0; opacity: 1;"/>
+            
+            <!-- table salary -->
+            <table class="table" id="salary-table">
+               <thead>
+                  <tr class="tr">
+                     <th>Date</th>
+                     <th>Register Time</th>
+                     <th>End Time</th>
+                     <th>Caculate Time</th>
+                     <th>Work Place</th>
+                     <th>Over Time</th>
+                     <th>Lack Of Working Time</th>
+                     <th>Annual Leave</th>
+                  </tr>
+               </thead>       
+               <tbody>
+
+               </tbody>
+            </table>
+         </div>  
       </div>
    </main>
 
@@ -80,6 +61,11 @@
    <%- include('./includes/footer.ejs') %>
 
    <!-- JS -->
-   <script src="./main.js"></script>
+   <script>
+      let data = <%- JSON.stringify(data) %>;
+      let annualLeave = <%- JSON.stringify(annualLeave) %>
+      let props = <%- JSON.stringify(props) %>
+   </script>
+   <script src="./salary.js"></script>
 </body>
 </html>

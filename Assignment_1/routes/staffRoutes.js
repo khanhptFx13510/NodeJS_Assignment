@@ -14,12 +14,9 @@ router.get('/profile', staffController.profile);
 router.post('/profile', staffController.postImageProfile);
 
 // page 3 salary
-router.get('/salary' , (req, res, next) => {
-   res.send("<h1>salary information</h1>")
-});
+router.get('/salary' , staffController.getSalary);
 
-router.get('/covid-19' , (req, res, next) => {
-   res.send("<h1>Covid information</h1>")
-});
+// page 4 Covid-19
+router.get('/covid-19' , staffController.getInfoCovid);
 
 module.exports = router;

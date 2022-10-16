@@ -42,20 +42,20 @@
                         </select>
    
                         <button type="submit" 
-                           class="btn my-2 col-4 <% if(statusWorking == 'true'){ %>
+                           class="btn my-2 col-4 <% if(statusWorking === true){ %>
                               btn-danger
                            <% } else { %>
                               btn-primary
                            <% } %>"                
                         >
-                           <% if(statusWorking == 'true'){ %>
+                           <% if(statusWorking === true){ %>
                               End Work
                            <% } else { %>
                               Start Work
                            <% } %>
                         </button>
                         <!-- value submit -->
-                        <input type="hidden" name=<% if(statusWorking == 'true'){ %>
+                        <input type="hidden" name=<% if(statusWorking === true){ %>
                               "endWork"
                            <% } else { %>
                               "startWork" 
@@ -79,12 +79,17 @@
                      </thead>
                
                      <tbody>
-                        <% props.workOnDay.map((staff) => { %>
+                        <% props.workOnDay
+                           .filter( prop => 
+                              new Date(prop.beginWork).getDate() === new Date().getDate() && 
+                              new Date(prop.beginWork).getMonth() === new Date().getMonth()
+                           )                        
+                           .map((staff) => { %>
                            <tr class="tr">
                               <!-- work Date -->
                               <td>
                                  <%= new Date().getDate() %>/
-                                 <%= new Date().getMonth() %>/
+                                 <%= new Date().getMonth() + 1 %>/
                                  <%= new Date().getFullYear() %>
                               </td>
                               <!-- Staff name -->
@@ -109,12 +114,17 @@
                               </td>
                               <!-- Working Time -->
                               <td>
-                                 <% if(staff.endWork) { %>
-                                    <%= new Date(
-                                       new Date(staff.endWork).getTime() - 
-                                       new Date(staff.beginWork).getTime()
-                                       ).getMinutes()
-                                    %>
+                                 <% 
+                                    if(staff.endWork) { 
+                                       let aTime = new Date(
+                                          new Date(staff.endWork).getTime() -
+                                          new Date(staff.beginWork).getTime()
+                                       );
+                                       let seconds = Math.floor((aTime / 1000) % 60);
+                                       let minutes = Math.floor((aTime / (1000 * 60)) % 60);
+                                       let hours = Math.floor((aTime / (1000 * 60 * 60)) % 24);
+                                 %>
+                                    <%= hours + ":" + minutes + ":" + seconds %>s
                                  <% } else { %>
                                     <h6>Working</h6>
                                  <% } %>
@@ -122,6 +132,7 @@
                            </tr>                          
                         <% }) %> 
                      </tbody>
+                     <!-- total time work on a day -->
                      <tr class="tr">
                         <th>
                            Total time worked:
@@ -130,6 +141,7 @@
 
                         </th>
                      </tr>
+
                   </table>
                   
                </div>
