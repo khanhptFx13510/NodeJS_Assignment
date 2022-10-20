@@ -36,7 +36,7 @@
             <hr style="FONT-WEIGHT: 600; margin: 2px 0 0 0; opacity: 1;"/>
             
             <!-- table salary -->
-            <table class="table" id="salary-table">
+            <table class="table" id="salary-table" style="margin-bottom: 0;">
                <thead>
                   <tr class="tr">
                      <th>Date</th>
@@ -53,6 +53,17 @@
 
                </tbody>
             </table>
+            <!-- calculate Salary -->
+            <div style="border: 1px solid ; text-align: center; background-color: aquamarine;
+            padding: 0;">
+               <h5 style="margin: auto; border-bottom: 1px solid;">
+                  Salary Calculation Formula: 
+                  Salary = salaryScale * 3000000 + (overTime - Lack Of Working Time) * 200000
+               </h5>
+               <h5 id="salary">
+
+               </h5>
+            </div>
          </div>  
       </div>
    </main>

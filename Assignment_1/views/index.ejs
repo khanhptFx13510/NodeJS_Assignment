@@ -18,12 +18,12 @@
                <button style="width: 100%" class="btn btn-primary my-2"
                   onclick= "showDetailsApply()"
                >
-                  Apply Work
+                  Apply Work <%= statusWorking %>
                </button>
 
                <!-- Work content -->
                <div id="contentApply" 
-                  style=<% if (isShowInfor == "true") { %>
+                  style=<% if (isShowInfor === "true") { %>
                      "display: block"
                   <% } else { %>
                      "display: none"
@@ -42,20 +42,20 @@
                         </select>
    
                         <button type="submit" 
-                           class="btn my-2 col-4 <% if(statusWorking === true){ %>
+                           class="btn my-2 col-4 <% if(statusWorking === 'true'){ %>
                               btn-danger
                            <% } else { %>
                               btn-primary
                            <% } %>"                
                         >
-                           <% if(statusWorking === true){ %>
+                           <% if(statusWorking === "true"){ %>
                               End Work
                            <% } else { %>
                               Start Work
                            <% } %>
                         </button>
                         <!-- value submit -->
-                        <input type="hidden" name=<% if(statusWorking === true){ %>
+                        <input type="hidden" name=<% if(statusWorking === "true"){ %>
                               "endWork"
                            <% } else { %>
                               "startWork" 

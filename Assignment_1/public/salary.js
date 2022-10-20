@@ -1,74 +1,354 @@
-// console.log(new Date(props.workOnDay[0].beginWork).getMonth());
-// console.log(new Date(props.workOnDay[0].beginWork).getDate());
-
 let table = document.getElementById("salary-table");
 
-// caculate every working on day
-function calculateTime(timeWork) {
+//  function convert time
+function convertTime(time) {
+   let seconds = Math.floor((time / 1000) % 60);
+   let minutes = Math.floor((time / (1000 * 60)) % 60);
+   let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 
+   return {hours: hours, minutes: minutes, seconds: seconds}
+}
+
+// caculation time everytime working on a day
+function calculateTime(timeWork) {
+   // console.log("timeWork", timeWork);
    if(timeWork.endWork == undefined){
-      return "In time working"
+      return "In time working";
    } else{
       let aTime = new Date(
          new Date(timeWork.endWork).getTime() - 
          new Date(timeWork.beginWork).getTime()
       );
-      let seconds = Math.floor((aTime / 1000) % 60);
-      let minutes = Math.floor((aTime / (1000 * 60)) % 60);
-      let hours = Math.floor((aTime / (1000 * 60 * 60)) % 24);
-      return  hours + ":" + minutes + ":" + seconds
+      return convertTime(aTime).hours + ":" 
+         + convertTime(aTime).minutes + ":" 
+         + convertTime(aTime).seconds;
    }
 }
+// calculate all time work in a day
+function calculateAllTimeInDay(day) {  
+   let totalTime = 0;
+   for(let i of day) {
+      totalTime += new Date(
+         new Date(i.endWork).getTime() - 
+         new Date(i.beginWork).getTime()
+      ).getTime();
+   }
+   return totalTime;
+}
 
-// check and render AnnualLeave into table
-function checkAnnual (month) {
+// check and render into cell AnnualLeave into table
+function renderAnnual (month) {
    // parse all day annual leave of a month in new array
    let dayAnnualInMonth = [];
-   for(days of annualLeave[month]){
+   for(days of annualLeave[month]){ 
       for(day of days.days)
          dayAnnualInMonth.push(day);
    }
-
    // render in table cell AnnualLeave
    for(let i = 0; i < dayAnnualInMonth.length; i++) {
       table.tBodies[0].rows[i].cells[7].innerHTML = `${dayAnnualInMonth[i]}`
    }   
 }
 
-// handle overtime and Lack of Working Time
-function checkOverTime(){
-   console.log(data)
-}
-
 // ------------------------ Check and render value in table-------------------------
 function monthDetail(element) {
    table.tBodies[0].innerHTML = "";
    if(element.innerText === "January") {
-      console.log(data[1]);
+      for(let i in data[1]){
+
+         for(day of data[1][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(1);
+      checkOverTime(1);
+      calculateSalary()
    }
    else if(element.innerText === "February") {
-      console.log(data[2]);
+      for(let i in data[2]){
+
+         for(day of data[2][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(2);
+      checkOverTime(2);
+      calculateSalary()
    }
    else if(element.innerText === "March") {
-      console.log(data[3]);
+      for(let i in data[3]){
+
+         for(day of data[3][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(3);
+      checkOverTime(3);
+      calculateSalary();
    }
    else if(element.innerText === "April") {
-      console.log(data[4]);
+      for(let i in data[4]){
+
+         for(day of data[4][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(4);
+      checkOverTime(4);
+      calculateSalary();
    }
    else if(element.innerText === "May") {
-      console.log(data[5]);
+      for(let i in data[5]){
+
+         for(day of data[5][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(5);
+      checkOverTime(5);
+      calculateSalary();
    }
    else if(element.innerText === "June"){
-      console.log(data[6]);
+      for(let i in data[6]){
+
+         for(day of data[6][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(6);
+      checkOverTime(6);
+      calculateSalary();
    }
    else if(element.innerText === "July"){
-      console.log(data[7]);
+      for(let i in data[7]){
+
+         for(day of data[7][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(7);
+      checkOverTime(7);
+      calculateSalary();
    }
    else if(element.innerText === "August"){
-      console.log(data[8]);
+      for(let i in data[8]){
+
+         for(day of data[8][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(8);
+      checkOverTime(8);
+      calculateSalary()
    }
    else if(element.innerText === "September"){
-      console.log(data[9]);
+      for(let i in data[9]){
+
+         for(day of data[9][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(9);
+      checkOverTime(9);
+      calculateSalary();
    }
    else if(element.innerText === "October"){
       for(let i in data[10]){
@@ -99,135 +379,184 @@ function monthDetail(element) {
             </tr>`
          };
       }
-      checkAnnual(10);
-      checkOverTime();
+      renderAnnual(10);
+      checkOverTime(10);
+      calculateSalary();
    }
    else if(element.innerText === "November"){
-      console.log(data[11]);
+      for(let i in data[11]){
+
+         for(day of data[11][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(11);
+      checkOverTime(11);
+      calculateSalary()
    }
    else if(element.innerText === "December"){
-      console.log(data[12]);
+      for(let i in data[12]){
+
+         for(day of data[12][i]){
+            table.tBodies[0].innerHTML += 
+            `<tr class="tr">
+               <td>${new Date(day.beginWork).getDate()}</td>
+               <td>
+                  ${new Date(day.beginWork).getHours()}:
+                  ${new Date(day.beginWork).getMinutes()}:
+                  ${new Date(day.beginWork).getSeconds()}s
+               </td>
+               <td>
+                  ${new Date(day.endWork).getHours()}:
+                  ${new Date(day.endWork).getMinutes()}:
+                  ${new Date(day.endWork).getSeconds()}s
+               </td>
+               <td>
+                  ${calculateTime(day)}
+               </td>
+               <td>
+                  ${day.workPlace}
+               </td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </tr>`
+         };
+      }
+      renderAnnual(12);
+      checkOverTime(12);
+      calculateSalary();
    }
 }
 
 
+// -------------------handle overtime and Lack of Working Time--------------------------
+function checkOverTime(month){   
+   // -----Nhom cac lan lam viec co cung ngay lai voi nhau
+   let daySamedate = {}
+   for(let i = 0; i < table.tBodies[0].rows.length; i++) {
+      let keyday = table.tBodies[0].rows[i].cells[0].innerText;
+      if(keyday in daySamedate){
+         daySamedate[keyday].push(table.tBodies[0].rows[i]);
+      } else {
+         daySamedate[keyday] = [table.tBodies[0].rows[i]]
+      }    
+   };
 
+   // ----tinh thoi gian duoc nghi trong annualLeave
+   let timeOfDateAnnual = {};
+   for(days of annualLeave[month]){ 
+      for(day of days.days){
+         let keyOfAnnualLeave = day.split("/")[1]
+         timeOfDateAnnual[keyOfAnnualLeave] = days.time
+      }         
+   }
 
+   // -----tinh tong thoi gian lam moi ngay------ 
+   for(let j in daySamedate) {
+      // ______tinh toan thoi gian lam trong 1 ngay
+      let timeWorkOnDay = calculateAllTimeInDay(data[month][j]);
+      // css tao ranh gioi giua cac ngay
+      daySamedate[j][daySamedate[j].length- 1].style.cssText = `
+            border-bottom: 1px solid black;
+      `
+      // check annual leave neu staff co xin nghi ngay nao thi - vao thoi gian lam thieu cua nhan vien
+      if(!timeOfDateAnnual[j]){
+         // check time working enough 8 hours or not
+         let timeRemaining = 0
+         if(timeWorkOnDay <= 8*60*60*1000){
+            timeRemaining = 8*60*60*1000 - timeWorkOnDay ;
 
+            daySamedate[j][daySamedate[j].length- 1].cells[6].innerText = 
+               "-" + convertTime(timeRemaining).hours + ":" 
+               + convertTime(timeRemaining).minutes + ":" 
+               + convertTime(timeRemaining).seconds + "s";           
+         } else {
+            timeRemaining = timeWorkOnDay - 8*60*60*1000;
 
-// const workOnDay = props.workOnDay;
-// create an object that stores data by month and day
-// let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
-// filter follow month in year
-// for(e of workOnDay){
-//    let dayKey = new Date(e.beginWork).getDate();
-//    // January
-//    if(new Date(e.beginWork).getMonth() === 1){
-//       if(dayKey in monthInYear[1]){
-//          monthInYear[1][dayKey].push(e);
-//       } else{
-//          monthInYear[1][dayKey] = [e];
-//       }
-//    }
-//    // February
-//    if(new Date(e.beginWork).getMonth() === 2){
+            daySamedate[j][daySamedate[j].length- 1].cells[5].innerText = 
+               "+" + convertTime(timeRemaining).hours + ":" 
+               + convertTime(timeRemaining).minutes + ":" 
+               + convertTime(timeRemaining).seconds + "s";
+         }
 
-//       if(dayKey in monthInYear[2]){
-//          monthInYear[2][dayKey].push(e);
-//       } else{
-//          monthInYear[2][dayKey] = [e];
-//       }
-//    }
-//    // March
-//    if(new Date(e.beginWork).getMonth() === 3){
+      } else{
 
-//       if(dayKey in monthInYear[3]){
-//          monthInYear[3][dayKey].push(e);
-//       } else{
-//          monthInYear[3][dayKey] = [e];
-//       }
-//    }
-//    // April
-//    if(new Date(e.beginWork).getMonth() === 4){
+         if((timeWorkOnDay + timeOfDateAnnual[j] * 60*60*1000) <= 8*60*60*1000){
+            timeRemaining = 8*60*60*1000 - (timeWorkOnDay + timeOfDateAnnual[j]*60*60*1000);
+            
+            daySamedate[j][daySamedate[j].length- 1].cells[6].innerText = 
+               "-" + convertTime(timeRemaining).hours + ":" 
+               + convertTime(timeRemaining).minutes + ":" 
+               + convertTime(timeRemaining).seconds + "s";               
+         }else{
+            timeRemaining = (timeWorkOnDay + timeOfDateAnnual[j]*60*60*1000) - 8*60*60*1000;
 
-//       if(dayKey in monthInYear[4]){
-//          monthInYear[4][dayKey].push(e);
-//       } else{
-//          monthInYear[4][dayKey] = [e];
-//       }
-//    }
-//    // May
-//    if(new Date(e.beginWork).getMonth() === 5){
+            daySamedate[j][daySamedate[j].length- 1].cells[5].innerText = 
+               "+" + convertTime(timeRemaining).hours + ":" 
+               + convertTime(timeRemaining).minutes + ":" 
+               + convertTime(timeRemaining).seconds + "s";
+         }
+      }      
+   }
+}
 
-//       if(dayKey in monthInYear[5]){
-//          monthInYear[5][dayKey].push(e);
-//       } else{
-//          monthInYear[5][dayKey] = [e];
-//       }
-//    }
-//    // June
-//    if(new Date(e.beginWork).getMonth() === 6){
+// Caculate Salary
+function calculateSalary(){
+   let salary = 0;
+   // salary scale
+   const salaryScale = props.salaryScale
+   // tim gia tri cua tong thoi gian lam du va lam thieu trong table
+   let tTable = table.tBodies[0];
+   let totalOverTime = 0;
+   let totalLackOfWork = 0;
+   let arrayOverTime = [];
+   let arrayLackOfWork = []; 
 
-//       if(dayKey in monthInYear[6]){
-//          monthInYear[6][dayKey].push(e);
-//       } else{
-//          monthInYear[6][dayKey] = [e];
-//       }
-//    }
-//    // July
-//    if(new Date(e.beginWork).getMonth() === 7){
+   for(let i = 0 ; i < tTable.rows.length; i++){
+      if(tTable.rows[i].cells[5].innerText.replace(/[+s]/g,'') !== ""){
+         arrayOverTime.push(tTable.rows[i].cells[5].innerText.replace(/[+s]/g,''));
+      }
+      if(tTable.rows[i].cells[6].innerText.replace(/[-s]/g,'') !== ""){
+         arrayLackOfWork.push(tTable.rows[i].cells[6].innerText.replace(/[-s]/g,''));
+      }
+   }; 
+   // find total Overtime convert to hours
+   for(let e of arrayOverTime){
+      let element = e.split(":");
+      totalOverTime += (Number(element[0]) + Number(element[1]/60));
+   };
+   // find total lack of working time to hours
+   for(let e of arrayLackOfWork){
+      let element = e.split(":");
+      totalLackOfWork += (Number(element[0]) + Number(element[1]/60));
+   };
 
-//       if(dayKey in monthInYear[7]){
-//          monthInYear[7][dayKey].push(e);
-//       } else{
-//          monthInYear[7][dayKey] = [e];
-//       }
-//    }
-//    // August
-//    if(new Date(e.beginWork).getMonth() === 8){
+   // nap cac bien tim duoc vao cong thuc tinh luong
+   salary = salaryScale * 3000000 + (totalOverTime.toFixed(2) - totalLackOfWork.toFixed(2))*200000;
 
-//       if(dayKey in monthInYear[8]){
-//          monthInYear[8][dayKey].push(e);
-//       } else{
-//          monthInYear[8][dayKey] = [e];
-//       }
-//    }
-//    // September
-//    if(new Date(e.beginWork).getMonth() === 9){
-
-//       if(dayKey in monthInYear[9]){
-//          monthInYear[9][dayKey].push(e);
-//       } else{
-//          monthInYear[9][dayKey]= [e]
-//       }
-//    }
-//    // October
-//    if(new Date(e.beginWork).getMonth() === 10){
-
-//       if(dayKey in monthInYear[10]){
-//          monthInYear[10][dayKey].push(e);
-//       } else{
-//          monthInYear[10][dayKey] = [e];
-//       }
-//    }
-//    // November
-//    if(new Date(e.beginWork).getMonth() === 11){
-
-//       if(dayKey in monthInYear[11]){
-//          monthInYear[11][dayKey].push(e);
-//       } else{
-//          monthInYear[11][dayKey] = [e];
-//       }
-//    }
-//    // December
-//    if(new Date(e.beginWork).getMonth() === 12){
-
-//       if(dayKey in monthInYear[12]){
-//          monthInYear[12][dayKey].push(e);
-//       } else{
-//          monthInYear[12][dayKey] = [e];
-//       }
-//    }
-// };
-
-// console.log(monthInYear);
+   document.getElementById("salary").innerText = "Calculate Total Salary: " + salary + " VND";
+   document.getElementById("salary").style.cssText ="background-color: #bf6839; color: white;margin: 0px;";
+}

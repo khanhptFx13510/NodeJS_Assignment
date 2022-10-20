@@ -41,7 +41,11 @@ function calculate(){
    let minutes = Math.floor((total / 60) % 60);
    let hours = Math.floor((total / (60 * 60)) % 24);
 
-   table.tBodies[1].rows[0].cells[1].innerHTML = hours + ":" + minutes + ":" + seconds + "s";
+   if(isNaN(seconds) || isNaN(minutes) || isNaN(hours)){
+      table.tBodies[1].rows[0].cells[1].innerHTML = `--:--:--`
+   } else{
+      table.tBodies[1].rows[0].cells[1].innerHTML = hours + ":" + minutes + ":" + seconds + "s";
+   }
 }
 
 window.onload = calculate();

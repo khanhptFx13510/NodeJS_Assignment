@@ -16,6 +16,8 @@ exports.getStaff = (req, res, next) => {
          if(statusWorking === undefined){
             if(staff.workOnDay[staff.workOnDay.length - 1].endWork === undefined){
                statusWorking = true;
+            }else{
+               statusWorking = false;
             }
          }
 
@@ -23,7 +25,7 @@ exports.getStaff = (req, res, next) => {
             props : staff,
             path: '/',
             isShowInfor: isShowInfor ? isShowInfor : false,
-            statusWorking: statusWorking ? statusWorking : false,
+            statusWorking: statusWorking,
             notifi: null
          });
       })
