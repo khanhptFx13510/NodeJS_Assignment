@@ -2,6 +2,8 @@ const path = require('path');
 const rootDir =require('path').dirname(process.mainModule.filename);
 const Staff = require('../model/staff');
 const DateOff = require('../model/date');
+const Covid = require('../model/covid');
+
 const { userInfo } = require('os');
 
 exports.getStaff = (req, res, next) => {
@@ -279,13 +281,112 @@ exports.getSalary = function(req, res, next){
 
 // Controller page 4 information Covid-19
 exports.getInfoCovid = function(req, res, next){
-   Staff.findById('631e91b269ba3974a72651c9')
-      .then((staff) => {
-         res.render('covid', {
-            props : staff,
-            path: '/covid',            
-         });
-      });
+   Covid.findOne(req.staff._id)
+      .then(result => {
+         let namePage = {name: "Covid-19"}
+         if(!result){
+            const staff = new Covid({
+               staffId: req.staff._id
+            });
+            staff.save();
+
+            res.render('covid', {
+               props : namePage,
+               path: '/covid-19',
+               data: data,
+               error: null,
+               name: req.staff.name            
+            });
+
+         }else{
+            let name= req.staff.name
+            res.render('covid', {
+               props : namePage,
+               path: '/covid-19',
+               data: result,
+               error: null,
+               name: name
+            });
+         }
+      })
+
 }
 
+exports.postInfoCovid = function(req, res, next){
+   const temperature = req.body.temperature;
+   const dateOfTemperature = req.body.dateOfTemperature;
+
+   // mui 1
+   const firstVaccineName= req.body.firstVaccineName;
+   const dateOfFirstInject = req.body.dateOfFirstInject;
+   // mui 2
+   const secondVaccineName= req.body.secondVaccineName;
+   const dateOfSecondInject = req.body.dateOfSecondInject;
+   // covid Status
+   const covidStatus = req.body.covidStatus;
+   const dateCovidStatus = req.body.dateCovidStatus;
+
+   // check conditional
+   if(
+      (temperature !== "" && !isNaN(temperature) && dateOfTemperature !== "") ||
+      (firstVaccineName !== "Choose..." && dateOfFirstInject !== "") ||
+      (secondVaccineName !== "Choose..." && dateOfSecondInject !== "") ||
+      (covidStatus !== "Choose..." && dateCovidStatus !== "")
+   ){
+      Covid.findOne(req.staff._id)
+         .then(covid => {
+            if(temperature !== "" && !isNaN(temperature) && dateOfTemperature !== ""){
+               covid["hypothermia"] = {
+                  temperature: temperature,
+                  time: dateOfTemperature
+               }
+            };
+   
+            if(firstVaccineName !== "Choose..." && dateOfFirstInject !== ""){
+               covid["firstInject"] = {
+                  typeVaccine: firstVaccineName,
+                  time: dateOfFirstInject
+               }
+            };
+   
+            if(secondVaccineName !== "Choose..." && dateOfSecondInject !== ""){
+               covid["secondInject"] = {
+                  typeVaccine: secondVaccineName,
+                  time: dateOfSecondInject
+               }
+            };
+   
+            if(covidStatus !== "Choose..." && dateCovidStatus !== ""){
+               covid["isCovid"]= {
+                  positive: covidStatus,
+                  time: dateCovidStatus
+               }
+            };
+            let data = covid
+            res.render('covid' , {
+               path: '/covid-19',
+               props: {name: "covid information"},
+               error: null,
+               data: data,
+               name: req.staff.name             
+            })
+            covid.save();
+         })
+   } else{
+      Covid.findOne(req.staff._id)
+         .then(covid => {
+            let data = covid;
+            console.log("data" , data);
+            res.render('covid' , {
+               path: '/covid-19',
+               props: {name: "covid information"},
+               error: "not enought information to save",
+               data: data,
+               name: req.staff.name              
+            })
+
+         })
+   }
+
+}
 

@@ -5,73 +5,115 @@
    <!-- Main Body -->
    <main>
       <div class="container">
+         <h2 style="text-align:center;">Declaration Information Covid-19</h2>
+         <!-- form submit information covid -->
+         <form class="row mb-3" action="/covid-19" method="POST">
+            <!-- dang ki thông tin thân nhiệt -->
+            <div class="col-md-6">
+               <label for="temperature" class="form-label">Hypothermia</label>
+               <input type="number" class="form-control" id="temperature" name="temperature" />            
+            </div>
+
+            <div class="col-md-6">
+               <label for="dateOfTemperature" class="form-label">Declaration Date</label>
+               <input type="date" class="form-control" id="dateOfTemperature" name="dateOfTemperature" />
+            </div>
+            <!-- đăng kí thông tin vaccine mũi 1 -->
+            <div class="col-md-6">
+               <label for="firstVaccineName" class="form-label">Vaccine Name First Inject:</label>
+
+               <select class="form-select" id="firstVaccineName" name="firstVaccineName">
+                  <option selected>Choose...</option>
+                  <option value="AstraZeneca">AstraZeneca</option>
+                  <option value="Pfizer">Pfizer</option>
+                  <option value="Spokevax (Moderna)">Spokevax (Moderna)</option>
+               </select>
+
+            </div>
+            <div class="col-md-6">
+               <label for="dateOfFirstInject" class="form-label">Date first inject</label>
+               <input type="date" class="form-control" id="dateOfFirstInject" name="dateOfFirstInject" />
+            </div>
+            <!-- đăng kí thông tin vaccine mũi 2 -->
+            <div class="col-md-6">
+               <label for="secondVaccineName" class="form-label">Vaccine Name Second Inject:</label>
+               <select class="form-select" id="secondVaccineName" name="secondVaccineName">
+                  <option selected>Choose...</option>
+                  <option value="AstraZeneca">AstraZeneca</option>
+                  <option value="Pfizer">Pfizer</option>
+                  <option value="Spokevax (Moderna)">Spokevax (Moderna)</option>
+               </select>
+            </div>
+            <div class="col-md-6">
+               <label for="dateOfSecondInject" class="form-label">Date second inject</label>
+               <input type="date" class="form-control" id="dateOfSecondInject" name="dateOfSecondInject" />
+               
+            </div>
+
+            <!-- khai báo tình trang nhiễm covid -->
+            <div class="col-md-6">
+               <label for="covidStatus" class="form-label">Covid-19 status:</label>
+               <select class="form-select" id="covidStatus" name="covidStatus">
+                  <option selected>Choose...</option>
+                  <option value="Infected with covid-19">Infected with covid-19</option>
+                  <option value="Never had covid">Never had covid</option>
+               </select>              
+            </div>
+            <div class="col-md-6">
+               <label for="dateCovidStatus" class="form-label">Date infection with covid-19:</label>
+               <input type="date" class="form-control" id="dateCovidStatus" name="dateCovidStatus" />
+            </div>
+            <p style="color: red">  
+                  <%= error %> 
+
+            </p>
+            <button type="submit" class="btn btn-primary">Submit Information</button>
+         </form>
+      </div>
+      <hr style="opacity: 1"/>
+      <!-- Render information covid -->
+      <div class="container">
          <div class="row">
-            <!-- image -->
-            <div class="col-4 py-2">
-               <img width="100%" src=<%= props.image %> alt="">
-            </div>
-            <!-- main content -->
-            <div class="col-8">
-               <h3 class="my-2" style="text-align: center;">Your Personal Information</h3>
-               <hr style="FONT-WEIGHT: 600; margin: 0; opacity: 1;"/>
-               <table class="table">
-                     <tr class="tr">
-                        <th>Name:</th>
-                        <th><%= props.name %></th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Staff ID:</th>
-                        <td><%= props._id %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Day of birth:</th>
-                        <th>
-                           <%= new Date(props.dOB).getDate() %>/
-                           <%= new Date(props.dOB).getMonth() %>/
-                           <%= new Date(props.dOB).getFullYear() %>
-                        </th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Salary Scale:</th>
-                        <td><%= props.salaryScale %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Start Date:</th>
-                        <th>
-                           <%= new Date(props.startDate).getDate() %>/
-                           <%= new Date(props.startDate).getMonth() %>/
-                           <%= new Date(props.startDate).getFullYear() %>
-                        </th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Department: </th>
-                        <td><%= props.department %></td>
-                     </tr>
-                     <tr class="tr">
-                        <th>Annual Leave:</th>
-                        <th><%= props.annualLeave.remainingDays %> days</th>
-                     </tr>
-                     <tr class="tr">
-                        <th>Image Profile:</th>
-                        <td><%= props.image %></td>
-                     </tr>
-               </table>
-
-               <button style="width: 100%" class="btn btn-primary my-2"
-               onclick="openChangeImage()">
-                  Change Profile Image
-               </button>
-
-               <form id="changeImage" style="display: none" action="/profile" method="POST">
-                  <div class="form-group">
-                     <label for="image"><h5>Your New Image:</h5></label>
-                     <input class="form-control" type="text" name="image" 
-                     onchange="handleImageChange(this)" />
-                  </div>
-                  <button class="btn btn-primary my-2" type="submit">Update</button>
-               </form>
-               <img src="" id="view" width="300"/>
-            </div>
+            <h4>Staff's Name: <%= name %></h4>
+            <% if(data) { %> 
+            <p>Last declared hypothermia: <% if(data.hypothermia.temperature){ %> 
+               <%= data.hypothermia.temperature %>
+               <% } %>
+            </p>
+            <p>Date Last declared hypothermia: <% if(data.hypothermia.temperature){ %>
+               <%= data.hypothermia.time %>
+               <% } %>
+            </p>
+            <p>First shot vaccine: <% if(data.firstInject.typeVaccine){ %>
+               <%= data.firstInject.typeVaccine %>
+               <% } %>
+            </p>
+            <p>Date first inject: 
+               <% if(data.firstInject.typeVaccine){ %>
+                  <%= data.firstInject.time %>
+               <% } %>
+            </p>
+            <p>Second shot vaccine: 
+               <% if(data.secondInject.typeVaccine){ %>
+                  <%= data.secondInject.typeVaccine %>
+               <% } %>
+            </p>
+            <p>Date second inject:
+               <% if(data.secondInject.time){ %>
+                  <%= data.secondInject.time %>
+               <% } %>
+            </p>
+            <p>History of infection with covid-19:
+               <% if(data.isCovid.positive){ %>
+                  <%= data.isCovid.positive %>
+               <% } %>
+            </p>
+            <p>Time infection:
+               <% if(data.isCovid.time){ %>
+                  <%= data.isCovid.time %>
+               <% } %>
+            </p>
+            <% } %>
          </div>
       </div>
    </main>
@@ -80,6 +122,6 @@
    <%- include('./includes/footer.ejs') %>
 
    <!-- JS -->
-   <script src="./main.js"></script>
+   <!-- <script src="./main.js"></script> -->
 </body>
 </html>

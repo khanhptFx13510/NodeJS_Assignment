@@ -18,5 +18,6 @@ router.get('/salary' , staffController.getSalary);
 
 // page 4 Covid-19
 router.get('/covid-19' , staffController.getInfoCovid);
+router.post('/covid-19', staffController.postInfoCovid);
 
 module.exports = router;

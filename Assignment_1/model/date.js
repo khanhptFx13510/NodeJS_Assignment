@@ -25,21 +25,6 @@ dateSchema.methods.addDaysOff = function(valueUpdates) {
       reason: valueUpdates.reason
    }
    this.save();
-   // if(daysOff[daysOff.length - 1].days.length === 0){
-   //    daysOff[daysOff.length - 1] = {
-   //       days: valueUpdates.daysArray, 
-   //       time: valueUpdates.timeAnnual, 
-   //       reason: valueUpdates.reason
-   //    }
-   //    this.save();
-   // }else{
-   //    daysOff[daysOff.length] = {
-   //       days: valueUpdates.daysArray, 
-   //       time: valueUpdates.timeAnnual, 
-   //       reason: valueUpdates.reason
-   //    }
-   //    this.save();
-   // }
 }
 
 module.exports = mongoose.model("dateOff" , dateSchema);

@@ -46,14 +46,16 @@ const staffSchema = new Schema({
             type: String
          }
       }
-   ]
+   ],
+   covidId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Covid',
+      require: true
+   }
 });
 
 staffSchema.methods.addWorkOnDay = function(item){
-   // console.log(
-   //    "parse to take hh:mm:ss",
-   //    new Date(this.workOnDay[0].endWork).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
-   // );
+
    // post time to start work and end work into staff.wonkOnDay
    const workOnDay = [...this.workOnDay];
    if(item.isNew){
