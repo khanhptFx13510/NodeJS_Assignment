@@ -59,26 +59,26 @@ function monthDetail(element) {
          for(day of data[1][i]){
             table.tBodies[0].innerHTML += 
             `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
+               <td data-label= "Date">${new Date(day.beginWork).getDate()}</td>
+               <td data-label= "Register Time">
                   ${new Date(day.beginWork).getHours()}:
                   ${new Date(day.beginWork).getMinutes()}:
                   ${new Date(day.beginWork).getSeconds()}s
                </td>
-               <td>
+               <td data-label= "End Time">
                   ${new Date(day.endWork).getHours()}:
                   ${new Date(day.endWork).getMinutes()}:
                   ${new Date(day.endWork).getSeconds()}s
                </td>
-               <td>
+               <td data-label= "Caculate Time">
                   ${calculateTime(day)}
                </td>
-               <td>
+               <td data-label= "Work Place">
                   ${day.workPlace}
                </td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td data-label= "Over Time"></td>
+               <td data-label= "Lack Of Working Time"></td>
+               <td data-label= "Annual Leave"></td>
             </tr>`
          };
       }
@@ -356,26 +356,26 @@ function monthDetail(element) {
          for(day of data[10][i]){
             table.tBodies[0].innerHTML += 
             `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
+               <td data-label= "Date">${new Date(day.beginWork).getDate()}</td>
+               <td data-label= "Register Time">
                   ${new Date(day.beginWork).getHours()}:
                   ${new Date(day.beginWork).getMinutes()}:
                   ${new Date(day.beginWork).getSeconds()}s
                </td>
-               <td>
+               <td data-label= "End Time">
                   ${new Date(day.endWork).getHours()}:
                   ${new Date(day.endWork).getMinutes()}:
                   ${new Date(day.endWork).getSeconds()}s
                </td>
-               <td>
+               <td data-label= "Caculate Time">
                   ${calculateTime(day)}
                </td>
-               <td>
+               <td data-label= "Work Place">
                   ${day.workPlace}
                </td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td data-label= "Over Time"></td>
+               <td data-label= "Lack Of Working Time"></td>
+               <td data-label= "Annual Leave"></td>
             </tr>`
          };
       }

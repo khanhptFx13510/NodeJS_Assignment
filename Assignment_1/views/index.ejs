@@ -7,12 +7,12 @@
       <div class="container">
          <div class="row">
             <!-- image -->
-            <div class="col-4 py-2">
+            <div class="col-xl-4 py-2">
                <img width="100%" src=<%= props.image %> alt="">
             </div>
 
             <!-- main content -->
-            <div class="col-8">
+            <div class="col-xl-8">
 
                <!-- Apply to join work and post into server -->
                <button style="width: 100%" class="btn btn-primary my-2"
@@ -87,23 +87,23 @@
                            .map((staff) => { %>
                            <tr class="tr">
                               <!-- work Date -->
-                              <td>
+                              <td data-label= "Date">
                                  <%= new Date().getDate() %>/
                                  <%= new Date().getMonth() + 1 %>/
                                  <%= new Date().getFullYear() %>
                               </td>
                               <!-- Staff name -->
-                              <td><%= props.name %></td>
+                              <td data-label= "Staff Name"><%= props.name %></td>
                               <!-- Work play -->
-                              <td><%= staff.workPlace %></td>
+                              <td data-label= "Work place"><%= staff.workPlace %></td>
                               <!-- time begin work -->
-                              <td>
+                              <td data-label= "Register time">
                                  <%= new Date(staff.beginWork).getHours() %>:
                                  <%= new Date(staff.beginWork).getMinutes() %>:
                                  <%= new Date(staff.beginWork).getSeconds() %>s
                               </td>
                               <!-- time end Work -->
-                              <td>
+                              <td data-label= "End time">
                                  <% if(staff.endWork) { %>
                                     <%= new Date(staff.endWork).getHours() %>:
                                     <%= new Date(staff.endWork).getMinutes() %>:
@@ -113,7 +113,7 @@
                                  <% } %>
                               </td>
                               <!-- Working Time -->
-                              <td>
+                              <td data-label= "Working time">
                                  <% 
                                     if(staff.endWork) { 
                                        let aTime = new Date(
