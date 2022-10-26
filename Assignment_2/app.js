@@ -10,6 +10,7 @@ app.set('views', 'views');
 
 // import Router
 const staffRoutes = require('./routes/staffRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // import controller
 const errorController = require('./controllers/error');
@@ -22,39 +23,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use((req ,res , next) => {
-  Staff.findById('631e91b269ba3974a72651c9')
-    .then((staff) => {
-      req.staff = staff
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  // Staff.findById('631e91b269ba3974a72651c9')
+  //   .then((staff) => {
+  //     req.staff = staff
+  //     next();
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  next();
 });
 
 app.use(staffRoutes);
+app.use(authRoutes);
 app.use(errorController.get404);
 
-mongoose.connect('mongodb+srv://khanhpham:khanhdu123@khanhpham.6zl1ibi.mongodb.net/assignment_1?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://khanhpham:khanhdu123@khanhpham.6zl1ibi.mongodb.net/assignment_2?retryWrites=true&w=majority')
 .then(result => {
   Staff.findOne().then((staff) => {
-    if(!staff){
-      const staff = new Staff({
-        name: 'Messi',
-        dOB: new Date("1992-9-16"),
-        salaryScale: 1.5,
-        image: "https://vnn-imgs-f.vgcloud.vn/2020/08/23/11/dien-vien-anh-thu-tiet-lo-nguyen-nhan-ly-hon-chong-cu.jpg",
-        annualLeave: 3,
-        department: "Sale",
-        startDate: new Date("2022-9-12")
-      });
-      staff.save()
-    }
+    // if(!staff){
+    //   const staff = new Staff({
+    //     name: 'Messi',
+    //     dOB: new Date("1992-9-16"),
+    //     salaryScale: 1.5,
+    //     image: "https://vnn-imgs-f.vgcloud.vn/2020/08/23/11/dien-vien-anh-thu-tiet-lo-nguyen-nhan-ly-hon-chong-cu.jpg",
+    //     annualLeave: 3,
+    //     department: "Sale",
+    //     startDate: new Date("2022-9-12")
+    //   });
+    //   staff.save()
+    // }
     app.listen(3001, () => {
       console.log(`Example app listening on port ${3001}`)
     })
   })
-  // console.log(Staff.findOne()._collection.collectionName);
 })
 .catch(err => console.log("error: " + err));
 
