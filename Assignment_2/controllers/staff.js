@@ -7,29 +7,43 @@ const Covid = require('../model/covid');
 const { userInfo } = require('os');
 
 exports.getStaff = (req, res, next) => {
-   const isShowInfor = req.query.isShowInfor
-   let statusWorking = req.query.statusWorking
+   var isShowInfor;
+   var statusWorking;
 
-   Staff.findById('631e91b269ba3974a72651c9')
+   Staff.findOne()
       .then((staff) => {
-         // staff.annualLeave.remainingDays = 4;
-         // staff.save();
-
-         if(statusWorking === undefined){
+         if(statusWorking == undefined){
             if(staff.workOnDay[staff.workOnDay.length - 1].endWork === undefined){
                statusWorking = true;
-            }else{
-               statusWorking = false;
+               res.render('index', {
+                  title: staff.name,
+                  props : staff,
+                  path: '/',
+                  isShowInfor: isShowInfor ? isShowInfor : false,
+                  statusWorking: statusWorking,
+                  notifi: null,
+               });
+            } else {
+               res.render('index', {
+                  title: staff.name,
+                  props : staff,
+                  path: '/',
+                  isShowInfor: isShowInfor ? isShowInfor : false,
+                  statusWorking: false,
+                  notifi: null,
+               });
             }
+         }else {
+            res.render('index', {
+               title: staff.name,
+               props : staff,
+               path: '/',
+               isShowInfor: isShowInfor ? isShowInfor : false,
+               statusWorking: statusWorking,
+               notifi: null,
+            });
          }
 
-         res.render('index', {
-            props : staff,
-            path: '/',
-            isShowInfor: isShowInfor ? isShowInfor : false,
-            statusWorking: statusWorking,
-            notifi: null
-         });
       })
    // res.sendFile(path.join(__dirname, '../views/index.html'));
 }
@@ -39,7 +53,11 @@ exports.postStaffWork = (req, res, next) => {
    const staffId = req.body.staffId;
    const endWork = req.body.endWork;
    const workPlace = req.body.workPlace;
-   
+
+   console.log(startWork);
+   console.log(staffId , workPlace);
+   console.log(endWork);
+
    Staff.findById(staffId)
       .then(staff => {
          if(startWork){
@@ -48,21 +66,31 @@ exports.postStaffWork = (req, res, next) => {
                isNew: true,
                workPlace: workPlace
             });
+            res.render('index', {
+               title: staff.name,
+               props : staff,
+               path: '/',
+               isShowInfor: true,
+               statusWorking: true,
+               notifi: null,
+            });
          } 
          else if(endWork){
             staff.addWorkOnDay({
                endWork: new Date(),
                isNew: false
             });
+            res.render('index', {
+               title: staff.name,
+               props : staff,
+               path: '/',
+               isShowInfor: true,
+               statusWorking: false,
+               notifi: null,
+            });
          }
       })
-      .then(result => {
-         if(startWork){
-            res.redirect('/?isShowInfor=true&statusWorking=true');
-         } else if(endWork){
-            res.redirect('/?isShowInfor=true&statusWorking=false');
-         }
-      })  
+      .catch(error => console.log(err))  
 };
 
 exports.postAnnualLeave = (req, res, next) => {
@@ -121,13 +149,14 @@ exports.postAnnualLeave = (req, res, next) => {
    } 
 }
 
-// View profile pape 2 Profile
+// View profile pape 2 Profile-------------------------------------------------------------------
 exports.profile = (req, res, next) => {
-   Staff.findById('631e91b269ba3974a72651c9')
+   Staff.findById(req.staff._id)
       .then((staff) => {
          res.render('profile', {
+            title: 'profile',
             props : staff,
-            path: '/profile',            
+            path: '/profile',
          });
       });     
 }
@@ -138,7 +167,7 @@ exports.postImageProfile = function(req, res, next){
    res.redirect('/profile');
 }
 
-// Controller page 3 salary
+// Controller page 3 salary---------------------------------------------------------------------
 exports.getSalary = function(req, res, next){
    // create an object that stores data by month and day
    let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
@@ -150,6 +179,7 @@ exports.getSalary = function(req, res, next){
    DateOff.findOne()
       .populate("staffId")
       .then((staff) => {
+         // console.log(staff);
          const workOnDay = staff.staffId.workOnDay;
          // filter follow month in year
          for(e of workOnDay){
@@ -271,6 +301,7 @@ exports.getSalary = function(req, res, next){
          }
          
          res.render('salary', {
+            title: 'salary',
             props: staff.staffId,
             path: '/salary',
             data: monthInYear,
@@ -283,7 +314,6 @@ exports.getSalary = function(req, res, next){
 exports.getInfoCovid = function(req, res, next){
    Covid.findOne(req.staff._id)
       .then(result => {
-         let namePage = {name: "Covid-19"}
          if(!result){
             const staff = new Covid({
                staffId: req.staff._id
@@ -291,9 +321,9 @@ exports.getInfoCovid = function(req, res, next){
             staff.save();
 
             res.render('covid', {
-               props : namePage,
+               title : "Covid-19",
                path: '/covid-19',
-               data: data,
+               data: staff,
                error: null,
                name: req.staff.name            
             });
@@ -301,7 +331,7 @@ exports.getInfoCovid = function(req, res, next){
          }else{
             let name= req.staff.name
             res.render('covid', {
-               props : namePage,
+               title : 'covid-19',
                path: '/covid-19',
                data: result,
                error: null,

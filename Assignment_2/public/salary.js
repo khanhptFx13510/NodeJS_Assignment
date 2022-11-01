@@ -55,7 +55,6 @@ function monthDetail(element) {
    table.tBodies[0].innerHTML = "";
    if(element.innerText === "January") {
       for(let i in data[1]){
-
          for(day of data[1][i]){
             table.tBodies[0].innerHTML += 
             `<tr class="tr">
@@ -351,6 +350,8 @@ function monthDetail(element) {
       calculateSalary();
    }
    else if(element.innerText === "October"){
+      console.log(data[1]);
+
       for(let i in data[10]){
 
          for(day of data[10][i]){
@@ -527,7 +528,7 @@ function checkOverTime(month){
 function calculateSalary(){
    let salary = 0;
    // salary scale
-   const salaryScale = props.salaryScale
+   const salaryScale = staff.salaryScale
    // tim gia tri cua tong thoi gian lam du va lam thieu trong table
    let tTable = table.tBodies[0];
    let totalOverTime = 0;

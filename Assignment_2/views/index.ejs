@@ -1,4 +1,6 @@
 <%- include('./includes/header.ejs') %>
+
+</head>
 <body>
    <!-- header -->
    <%- include('./includes/nav.ejs') %>
@@ -23,7 +25,7 @@
 
                <!-- Work content -->
                <div id="contentApply" 
-                  style=<% if (isShowInfor === "true") { %>
+                  style=<% if (isShowInfor === true) { %>
                      "display: block"
                   <% } else { %>
                      "display: none"
@@ -41,26 +43,19 @@
                            <option value="Home">Home</option>
                         </select>
    
-                        <button type="submit" 
-                           class="btn my-2 col-4 <% if(statusWorking === 'true'){ %>
-                              btn-danger
-                           <% } else { %>
-                              btn-primary
-                           <% } %>"                
+                        <button type="submit"
+                           class="btn my-2 col-4 <%= statusWorking ? 'btn-danger' : 'btn-primary' %>"   
                         >
-                           <% if(statusWorking === "true"){ %>
+                           <% if(statusWorking === true){ %>
                               End Work
                            <% } else { %>
                               Start Work
                            <% } %>
                         </button>
                         <!-- value submit -->
-                        <input type="hidden" name=<% if(statusWorking === "true"){ %>
-                              "endWork"
-                           <% } else { %>
-                              "startWork" 
-                           <% } %>
-                           value="<%= new Date() %>" 
+                        <input type="hidden" 
+                           name= <%= statusWorking ? "endWork" : "startWork" %> 
+                           value="<%= new Date() %>"
                         />
                         <input type="hidden" name="staffId" value="<%= props._id %>" />
                      </div>
