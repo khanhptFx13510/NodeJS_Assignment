@@ -49,409 +49,112 @@ function renderAnnual (month) {
       table.tBodies[0].rows[i].cells[7].innerHTML = `${dayAnnualInMonth[i]}`
    }   
 }
-
+// render value table
+function renderTableSalary(data) {
+   for(let i in data){
+      for(day of data[i]){
+         table.tBodies[0].innerHTML += 
+         `<tr class="tr">
+            <td>${new Date(day.beginWork).getDate()}</td>
+            <td>
+               ${new Date(day.beginWork).getHours()}:
+               ${new Date(day.beginWork).getMinutes()}:
+               ${new Date(day.beginWork).getSeconds()}s
+            </td>
+            <td>
+               ${new Date(day.endWork).getHours()}:
+               ${new Date(day.endWork).getMinutes()}:
+               ${new Date(day.endWork).getSeconds()}s
+            </td>
+            <td>
+               ${calculateTime(day)}
+            </td>
+            <td>
+               ${day.workPlace}
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+         </tr>`
+      };
+   }
+}
 // ------------------------ Check and render value in table-------------------------
 function monthDetail(element) {
    table.tBodies[0].innerHTML = "";
    if(element.innerText === "January") {
-      for(let i in data[1]){
-         for(day of data[1][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td data-label= "Date">${new Date(day.beginWork).getDate()}</td>
-               <td data-label= "Register Time">
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td data-label= "End Time">
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td data-label= "Caculate Time">
-                  ${calculateTime(day)}
-               </td>
-               <td data-label= "Work Place">
-                  ${day.workPlace}
-               </td>
-               <td data-label= "Over Time"></td>
-               <td data-label= "Lack Of Working Time"></td>
-               <td data-label= "Annual Leave"></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[1]);
       renderAnnual(1);
       checkOverTime(1);
       calculateSalary()
    }
    else if(element.innerText === "February") {
-      for(let i in data[2]){
-
-         for(day of data[2][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[2]);
       renderAnnual(2);
       checkOverTime(2);
       calculateSalary()
    }
    else if(element.innerText === "March") {
-      for(let i in data[3]){
-
-         for(day of data[3][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[3]);
       renderAnnual(3);
       checkOverTime(3);
       calculateSalary();
    }
    else if(element.innerText === "April") {
-      for(let i in data[4]){
-
-         for(day of data[4][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[4]);
       renderAnnual(4);
       checkOverTime(4);
       calculateSalary();
    }
    else if(element.innerText === "May") {
-      for(let i in data[5]){
-
-         for(day of data[5][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[5]);
       renderAnnual(5);
       checkOverTime(5);
       calculateSalary();
    }
    else if(element.innerText === "June"){
-      for(let i in data[6]){
-
-         for(day of data[6][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[6]);
       renderAnnual(6);
       checkOverTime(6);
       calculateSalary();
    }
    else if(element.innerText === "July"){
-      for(let i in data[7]){
-
-         for(day of data[7][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[7]);
       renderAnnual(7);
       checkOverTime(7);
       calculateSalary();
    }
    else if(element.innerText === "August"){
-      for(let i in data[8]){
-
-         for(day of data[8][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[8]);
       renderAnnual(8);
       checkOverTime(8);
       calculateSalary()
    }
    else if(element.innerText === "September"){
-      for(let i in data[9]){
-
-         for(day of data[9][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[9]);
       renderAnnual(9);
       checkOverTime(9);
       calculateSalary();
    }
    else if(element.innerText === "October"){
-      console.log(data[1]);
-
-      for(let i in data[10]){
-
-         for(day of data[10][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td data-label= "Date">${new Date(day.beginWork).getDate()}</td>
-               <td data-label= "Register Time">
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td data-label= "End Time">
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td data-label= "Caculate Time">
-                  ${calculateTime(day)}
-               </td>
-               <td data-label= "Work Place">
-                  ${day.workPlace}
-               </td>
-               <td data-label= "Over Time"></td>
-               <td data-label= "Lack Of Working Time"></td>
-               <td data-label= "Annual Leave"></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[10]);
       renderAnnual(10);
       checkOverTime(10);
       calculateSalary();
    }
    else if(element.innerText === "November"){
-      for(let i in data[11]){
-
-         for(day of data[11][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[11]);
       renderAnnual(11);
       checkOverTime(11);
       calculateSalary()
    }
    else if(element.innerText === "December"){
-      for(let i in data[12]){
-
-         for(day of data[12][i]){
-            table.tBodies[0].innerHTML += 
-            `<tr class="tr">
-               <td>${new Date(day.beginWork).getDate()}</td>
-               <td>
-                  ${new Date(day.beginWork).getHours()}:
-                  ${new Date(day.beginWork).getMinutes()}:
-                  ${new Date(day.beginWork).getSeconds()}s
-               </td>
-               <td>
-                  ${new Date(day.endWork).getHours()}:
-                  ${new Date(day.endWork).getMinutes()}:
-                  ${new Date(day.endWork).getSeconds()}s
-               </td>
-               <td>
-                  ${calculateTime(day)}
-               </td>
-               <td>
-                  ${day.workPlace}
-               </td>
-               <td></td>
-               <td></td>
-               <td></td>
-            </tr>`
-         };
-      }
+      renderTableSalary(data[12]);
       renderAnnual(12);
       checkOverTime(12);
       calculateSalary();
    }
 }
-
 
 // -------------------handle overtime and Lack of Working Time--------------------------
 function checkOverTime(month){   
@@ -561,3 +264,57 @@ function calculateSalary(){
    document.getElementById("salary").innerText = "Calculate Total Salary: " + salary + " VND";
    document.getElementById("salary").style.cssText ="background-color: #bf6839; color: white;margin: 0px;";
 }
+
+// render all time working when load page-----------------------------
+function workAllTime() {
+   // 1
+   renderTableSalary(data[1]);
+   renderAnnual(1);
+   checkOverTime(1);
+   // 2
+   renderTableSalary(data[2]);
+   renderAnnual(2);
+   checkOverTime(2);
+   // 3
+   renderTableSalary(data[3]);
+   renderAnnual(3);
+   checkOverTime(3);
+   // 4
+   renderTableSalary(data[4]);
+   renderAnnual(4);
+   checkOverTime(4);
+   // 5
+   renderTableSalary(data[5]);
+   renderAnnual(5);
+   checkOverTime(5);
+   // 6
+   renderTableSalary(data[6]);
+   renderAnnual(6);
+   checkOverTime(6);
+   // 7
+   renderTableSalary(data[7]);
+   renderAnnual(7);
+   checkOverTime(7);
+   // 8
+   renderTableSalary(data[8]);
+   renderAnnual(8);
+   checkOverTime(8);
+   // 9
+   renderTableSalary(data[9]);
+   renderAnnual(9);
+   checkOverTime(9);
+   // 10
+   renderTableSalary(data[10]);
+   renderAnnual(10);
+   checkOverTime(10);
+   // 11
+   renderTableSalary(data[11]);
+   renderAnnual(11);
+   checkOverTime(11);
+   // 12
+   renderTableSalary(data[12]);
+   renderAnnual(12);
+   checkOverTime(12);
+}
+
+window.onload = workAllTime();
