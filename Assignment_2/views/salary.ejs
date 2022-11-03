@@ -65,6 +65,18 @@
 
                </h5>
             </div>
+            <div style="display: flex; justify-content: center;">
+               <button class="btn btn-primary mx-1" id="previous" onclick="convertPageNumber(false)">previous page</button>
+               <button class="btn btn-primary mx-1" id="next" onclick="convertPageNumber(true)">next page</button>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+               <h6 style="height: 12px">choose number row:</h6>
+               <select name="size" style="border-radius: 4px; background-color: #333; color: white;">
+                  <option value="10">10 rows a page</option>
+                  <option value="20">20 rows a page</option>
+                  <option value="30">30 rows a page</option>
+               </select>
+            </div>               
          </div>  
       </div>
    </main>

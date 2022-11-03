@@ -46,7 +46,7 @@ function renderAnnual (month) {
    }
    // render in table cell AnnualLeave
    for(let i = 0; i < dayAnnualInMonth.length; i++) {
-      table.tBodies[0].rows[i].cells[7].innerHTML = `${dayAnnualInMonth[i]}`
+      table.tBodies[0].rows[i].cells[7].innerText = `${dayAnnualInMonth[i]}`
    }   
 }
 // render value table
@@ -265,56 +265,70 @@ function calculateSalary(){
    document.getElementById("salary").style.cssText ="background-color: #bf6839; color: white;margin: 0px;";
 }
 
-// render all time working when load page-----------------------------
+// ------------------render all time working when load page-----------------------------
+let workOnDay = staff.workOnDay;
+let pageNumber = 1;
+let pageSize = 10;
+let tagSize = document.getElementsByName("size")[0];
+
+tagSize.addEventListener("change", convertPageSize(this.value) , false);
+
+function convertPageSize(newPageSize) {
+   table.tBodies[0].innerHTML = "";
+   pageSize = newPageSize;
+   renderPage(newPageSize , pageNumber);
+   console.log(newPageSize);
+};
+
+function convertPageNumber (value){
+   table.tBodies[0].innerHTML = "";
+   if(value){
+      pageNumber += 1;
+      console.log(pageNumber);
+      renderPage(pageSize, pageNumber);
+   }else{
+      pageNumber -= 1;
+      console.log(pageNumber);
+      renderPage(pageSize, pageNumber);
+   }
+}
+
+// -----------render result pagination on view-----------
+function renderPage( pSize, pNumber) {   
+   for(e of pagination(workOnDay, pSize , pNumber)){
+      table.tBodies[0].innerHTML += 
+      `<tr class="tr">
+         <td>${new Date(e.beginWork).getDate()}</td>
+         <td>
+            ${new Date(e.beginWork).getHours()}:
+            ${new Date(e.beginWork).getMinutes()}:
+            ${new Date(e.beginWork).getSeconds()}s
+         </td>
+         <td>
+            ${new Date(e.endWork).getHours()}:
+            ${new Date(e.endWork).getMinutes()}:
+            ${new Date(e.endWork).getSeconds()}s
+         </td>
+         <td>
+            ${calculateTime(e)}
+         </td>
+         <td>
+            ${e.workPlace}
+         </td>
+         <td></td>
+         <td></td>
+         <td></td>
+      </tr>`
+   };
+}
+
 function workAllTime() {
-   // 1
-   renderTableSalary(data[1]);
-   renderAnnual(1);
-   checkOverTime(1);
-   // 2
-   renderTableSalary(data[2]);
-   renderAnnual(2);
-   checkOverTime(2);
-   // 3
-   renderTableSalary(data[3]);
-   renderAnnual(3);
-   checkOverTime(3);
-   // 4
-   renderTableSalary(data[4]);
-   renderAnnual(4);
-   checkOverTime(4);
-   // 5
-   renderTableSalary(data[5]);
-   renderAnnual(5);
-   checkOverTime(5);
-   // 6
-   renderTableSalary(data[6]);
-   renderAnnual(6);
-   checkOverTime(6);
-   // 7
-   renderTableSalary(data[7]);
-   renderAnnual(7);
-   checkOverTime(7);
-   // 8
-   renderTableSalary(data[8]);
-   renderAnnual(8);
-   checkOverTime(8);
-   // 9
-   renderTableSalary(data[9]);
-   renderAnnual(9);
-   checkOverTime(9);
-   // 10
-   renderTableSalary(data[10]);
-   renderAnnual(10);
-   checkOverTime(10);
-   // 11
-   renderTableSalary(data[11]);
-   renderAnnual(11);
-   checkOverTime(11);
-   // 12
-   renderTableSalary(data[12]);
-   renderAnnual(12);
-   checkOverTime(12);
+   renderPage(5 ,1);       
 }
 
 window.onload = workAllTime();
+
+// ---------------pagination----------------------------------------------
+function pagination(array, page_size, page_number) {
+   return array.slice((page_number -1) * page_size, page_number * page_size);
+}
