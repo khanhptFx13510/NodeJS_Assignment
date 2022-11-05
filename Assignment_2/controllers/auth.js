@@ -2,7 +2,7 @@ var bcrypt = require('bcryptjs');
 const Staff = require('../model/staff')
 
 exports.getLogin = (req, res, next) => {
-   console.log("cookies: ",req.get('Cookie'));
+   // console.log("cookies: ",req.get('Cookie'));
    // const isLoggedIn = req.get('Cookie').trim().split('=')[1] === 'true';
    res.render('login' , {
       title: 'login',   
@@ -13,12 +13,13 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
    const email = req.body.email;
    const password = req.body.password;
+
    console.log(email, password);
+   // console.log("req = " , req);
+   
    Staff.findOne({email: email})
       .then((staff) => {
          console.log(staff.password === password);
-         console.log(typeof staff.password === 'string');
-         console.log(typeof password === 'string');
 
          if(!staff){
             return res.redirect("/login");

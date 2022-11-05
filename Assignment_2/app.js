@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const multer = require('multer');
 
 const MONGODB_URI = 'mongodb+srv://khanhpham:khanhdu123@khanhpham.6zl1ibi.mongodb.net/assignment_2';
 
@@ -27,10 +28,37 @@ const errorController = require('./controllers/error');
 
 // import Model
 const Staff = require('./model/staff');
-const Timer = require('./model/date');
 
+// Using csrf to protecting hacks
+// app.use(csrf());
+
+// Link to come Store save file image
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now().toString() + '-' + file.originalname);
+  },
+});
+
+// Filter Image to save
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ){
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(
+  multer({ storage: fileStorage , fileFilter: fileFilter}).single('image')
+);
 
 app.use(
   session({ 
@@ -41,11 +69,12 @@ app.use(
   })
 );
 
-// Using csrf to protecting hacks
-// app.use(csrf());
 
 app.use((req ,res , next) => {
-  Staff.findOne()
+  if (!req.session.staff) {
+    return next();
+  }
+  Staff.findById(req.session.staff._id)
     .then(staff => {
       req.staff = staff
       next();
@@ -53,14 +82,6 @@ app.use((req ,res , next) => {
     .catch((err) => {
       console.log(err);
     });
-  // Staff.findById('631e91b269ba3974a72651c9')
-  //   .then((staff) => {
-  //     req.staff = staff
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 });
 
 // truyen du lieu xac thuc cho tat ca cac page yeu cau 

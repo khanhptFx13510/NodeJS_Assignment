@@ -1,16 +1,16 @@
 const path = require('path');
-const rootDir =require('path').dirname(process.mainModule.filename);
+const fs = require('fs');
 const Staff = require('../model/staff');
 const DateOff = require('../model/date');
 const Covid = require('../model/covid');
+const PDFDocument = require('pdfkit');
 
 const { userInfo } = require('os');
 
 exports.getStaff = (req, res, next) => {
    var isShowInfor;
    var statusWorking;
-
-   Staff.findOne()
+   Staff.findById(req.staff._id)
       .then((staff) => {
          if(statusWorking == undefined){
             if(staff.workOnDay[staff.workOnDay.length - 1].endWork === undefined){
@@ -54,11 +54,7 @@ exports.postStaffWork = (req, res, next) => {
    const endWork = req.body.endWork;
    const workPlace = req.body.workPlace;
 
-   console.log(startWork);
-   console.log(staffId , workPlace);
-   console.log(endWork);
-
-   Staff.findById(staffId)
+   Staff.findById(req.staff._id)
       .then(staff => {
          if(startWork){
             staff.addWorkOnDay({
@@ -99,7 +95,7 @@ exports.postAnnualLeave = (req, res, next) => {
 
    // Information update annualLeave
    const annualLeave = req.body.datePicker;
-   const staffId = req.body.staffId;
+   const staffId = req.staff._id;
    const reason = req.body.reason;
    const timeAnnual = req.body.timeAnnual;
    
@@ -162,8 +158,11 @@ exports.profile = (req, res, next) => {
 }
    // Change Image Profile
 exports.postImageProfile = function(req, res, next){
-   const newImage = req.body.image;
-   req.staff.changeImage(newImage);
+   const newImage = req.file;
+   if(!newImage){
+      res.redirect('/profile');
+   }  
+   req.staff.changeImage(newImage.path);
    res.redirect('/profile');
 }
 
@@ -299,59 +298,114 @@ exports.getSalary = function(req, res, next){
             let splitDay = e.days[0].split("/");
             annualLeave[splitDay[0]].push(e);            
          }
-         
-         res.render('salary', {
-            title: 'salary',
-            props: staff.staffId,
-            path: '/salary',
-            data: monthInYear,
-            annualLeave: annualLeave     
-         });
-      });
-}
+         // find information manager
+         console.log(staff.staffId.manager);
+         var nameManager = "";
+
+         Staff.findById(staff.staffId.manager)
+            .then(element => {
+               nameManager = element.name;
+               res.render('salary', {
+                  title: 'salary',
+                  props: staff.staffId,
+                  path: '/salary',
+                  data: monthInYear,
+                  annualLeave: annualLeave,
+                  nameManager: nameManager,
+               });
+            })         
+      })
+};
 
 // Controller page 4 information Covid-19
-exports.getInfoCovid = function(req, res, next){
-   Covid.findOne(req.staff._id)
-      .then(result => {
-         if(!result){
-            const staff = new Covid({
-               staffId: req.staff._id
+exports.getInfoCovid = function(req, res, next){  
+   console.log("req.staff.manager", req.staff._doc.manager);
+   if(!req.staff._doc.manager){
+      Covid.find()
+         .then(results => {
+            let data = results.find((e) => 
+               e._doc.staffId.toString() == req.staff._doc._id.toString()
+            );
+            let list = results.filter((e) => {
+               return e._doc.staffId.toString() != req.staff._doc._id.toString()
             });
-            staff.save();
 
             res.render('covid', {
                title : "Covid-19",
                path: '/covid-19',
-               data: staff,
+               data: data,
                error: null,
-               name: req.staff.name            
+               name: req.staff.name,
+               isManager: list    
             });
+         })
+         .catch((err) => {
+            console.log("error: ", err);
+         })
+   }
 
-         }else{
-            let name= req.staff.name
-            res.render('covid', {
-               title : 'covid-19',
-               path: '/covid-19',
-               data: result,
-               error: null,
-               name: name
-            });
-         }
-      })
+   // Covid.findOne({staffId: req.staff._id})
+   //    .then(result => {
+   //       if(!result){
+   //          const item = new Covid({
+   //             staffId: req.staff._id,
+   //             name: req.staff.name
+   //          });
+   //          item.save();
+   //          if(req.staff.manager){
+   //             res.render('covid', {
+   //                title : "Covid-19",
+   //                path: '/covid-19',
+   //                data: item,
+   //                error: null,
+   //                name: req.staff.name,
+   //                isManager: null    
+   //             });
+   //          } else{
+   //             res.render('covid', {
+   //                title : "Covid-19",
+   //                path: '/covid-19',
+   //                data: item,
+   //                error: null,
+   //                name: req.staff.name,
+   //                isManager: "yes"    
+   //             });
+   //          }  
+   //       }else{
+   //          if(req.staff.manager){
+   //             res.render('covid', {
+   //                title : 'covid-19',
+   //                path: '/covid-19',
+   //                data: result,
+   //                error: null,
+   //                name: req.staff.name,
+   //                isManager: null
+   //             });               
+   //          }else{
+   //             res.render('covid', {
+   //                title : "Covid-19",
+   //                path: '/covid-19',
+   //                data: result,
+   //                error: null,
+   //                name: req.staff.name,
+   //                isManager: "yes"    
+   //             });
+   //          };
+   //       }
+   //    })
 
-}
+};
 
+// -----------post covid-------------
 exports.postInfoCovid = function(req, res, next){
    const temperature = req.body.temperature;
    const dateOfTemperature = req.body.dateOfTemperature;
 
-   // mui 1
-   const firstVaccineName= req.body.firstVaccineName;
-   const dateOfFirstInject = req.body.dateOfFirstInject;
-   // mui 2
-   const secondVaccineName= req.body.secondVaccineName;
-   const dateOfSecondInject = req.body.dateOfSecondInject;
+   // information injection
+   const vaccineName = req.body.vaccineName;
+   const dateOfInject = req.body.dateOfInject;
+   const numberInjection = req.body.numberInjection;
+
    // covid Status
    const covidStatus = req.body.covidStatus;
    const dateCovidStatus = req.body.dateCovidStatus;
@@ -359,64 +413,107 @@ exports.postInfoCovid = function(req, res, next){
    // check conditional
    if(
       (temperature !== "" && !isNaN(temperature) && dateOfTemperature !== "") ||
-      (firstVaccineName !== "Choose..." && dateOfFirstInject !== "") ||
-      (secondVaccineName !== "Choose..." && dateOfSecondInject !== "") ||
+      (vaccineName !== "Choose..." && dateOfInject !== "" && numberInjection !== "") ||
       (covidStatus !== "Choose..." && dateCovidStatus !== "")
    ){
-      Covid.findOne(req.staff._id)
+      Covid.findOne({staffId: req.staff._id})
          .then(covid => {
             if(temperature !== "" && !isNaN(temperature) && dateOfTemperature !== ""){
                covid["hypothermia"] = {
                   temperature: temperature,
                   time: dateOfTemperature
                }
-            };
-   
-            if(firstVaccineName !== "Choose..." && dateOfFirstInject !== ""){
-               covid["firstInject"] = {
-                  typeVaccine: firstVaccineName,
-                  time: dateOfFirstInject
-               }
-            };
-   
-            if(secondVaccineName !== "Choose..." && dateOfSecondInject !== ""){
-               covid["secondInject"] = {
-                  typeVaccine: secondVaccineName,
-                  time: dateOfSecondInject
-               }
-            };
-   
+            };  
+            if(vaccineName !== "Choose..." && dateOfInject !== "" && numberInjection !== ""){
+               covid.injectVacine = [...covid.injectVacine, {
+                  numberInject: numberInjection,
+                  typeVaccine: vaccineName,
+                  time: dateOfInject
+               }]
+            };   
             if(covidStatus !== "Choose..." && dateCovidStatus !== ""){
                covid["isCovid"]= {
                   positive: covidStatus,
                   time: dateCovidStatus
                }
             };
-            let data = covid
-            res.render('covid' , {
-               path: '/covid-19',
-               props: {name: "covid information"},
-               error: null,
-               data: data,
-               name: req.staff.name             
-            })
+            let data = covid;
+            
+            if(req.staff.manager){
+               res.render('covid' , {
+                  path: '/covid-19',
+                  title: "covid information",
+                  error: null,
+                  data: data,
+                  name: req.staff.name,
+                  isManager: null             
+               })           
+            }else{
+               res.render('covid' , {
+                  path: '/covid-19',
+                  title: "covid information",
+                  error: null,
+                  data: data,
+                  name: req.staff.name,
+                  isManager: !null             
+               })
+            }
             covid.save();
-         })
+         })   
    } else{
       Covid.findOne(req.staff._id)
          .then(covid => {
             let data = covid;
-            console.log("data" , data);
-            res.render('covid' , {
-               path: '/covid-19',
-               props: {name: "covid information"},
-               error: "not enought information to save",
-               data: data,
-               name: req.staff.name              
-            })
-
+            if(req.staff.manager){
+               res.render('covid-manager' , {
+                  path: '/covid-19',
+                  title: "covid information",
+                  error: "not enought information to save",
+                  data: data,
+                  name: req.staff.name,
+                  isManager: null,             
+               })
+               
+            }else{
+               res.render('covid' , {
+                  path: '/covid-19',
+                  title: "covid information",
+                  error: "not enought information to save",
+                  data: data,
+                  name: req.staff.name,
+                  isManageable: !null             
+               })
+            }
          })
    }
+};
 
-}
+// ---------Print file PDF----
+exports.getPdf = function(req, res, next){
+   const orderId = req.params.orderId;
+    Covid.findById(orderId)
+      .then((order) => {
+         if (!order) {
+               return next(new Error('No order found.'));
+         }
+         if (order.user.userId.toString() !== req.user._id.toString()) {
+               return next(new Error('Unauthorized user.'));
+         }
+         const invoiceName = 'invoice-' + orderId + '.pdf';
+         const invoicePath = path.join('data', 'invoices', invoiceName);
 
+         const pdfDoc = new PDFDocument();
+         res.setHeader('Content-Type', 'application/pdf');
+         res.setHeader(
+               'Content-Disposition',
+               'inline; filename="' + invoiceName + '"'
+         );
+         pdfDoc.pipe(fs.createWriteStream(invoicePath));
+         pdfDoc.pipe(res);
+
+         pdfDoc.text('Hello World!');
+
+         pdfDoc.end();
+      })
+      .catch((err) => next(err));
+};

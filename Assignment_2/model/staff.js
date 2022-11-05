@@ -59,11 +59,7 @@ const staffSchema = new Schema({
          }
       }
    ],
-   covidId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Covid',
-      require: true
-   }
+   manager: Schema.Types.Mixed
 });
 
 staffSchema.methods.addWorkOnDay = function(item){
@@ -106,5 +102,6 @@ staffSchema.methods.addDateOffId = function(dateOff){
 staffSchema.methods.changeImage = function(newImg){
    this.image = newImg;
    this.save();
-}
+};
+
 module.exports = mongoose.model('Staff' , staffSchema);

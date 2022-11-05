@@ -9,7 +9,7 @@
          <div class="row">
             <!-- image -->
             <div class="col-xl-4 py-2">
-               <img width="100%" src=<%= props.image %> alt="">
+               <img width="100%" src="/<%= props.image %>" alt="">
             </div>
             <!-- main content -->
             <div class="col-xl-8">
@@ -59,15 +59,18 @@
                </table>
 
                <button style="width: 100%" class="btn btn-primary my-2"
-               onclick="openChangeImage()">
+               onclick="openChangeImage()" >
                   Change Profile Image
                </button>
 
-               <form id="changeImage" style="display: none" action="/profile" method="POST">
+               <form id="changeImage" style="display: none" action="/profile" method="POST" enctype="multipart/form-data">
                   <div class="form-group">
                      <label for="image"><h5>Your New Image:</h5></label>
-                     <input class="form-control" type="text" name="image" 
-                     onchange="handleImageChange(this)" />
+                     <input class="form-control" 
+                        type="file" 
+                        name="image" 
+                        onchange="handleImageChange(this)" 
+                     />
                   </div>
                   <button class="btn btn-primary my-2" type="submit">Update</button>
                </form>

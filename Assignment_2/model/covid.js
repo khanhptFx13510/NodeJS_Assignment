@@ -11,18 +11,18 @@ const covidSchema = new Schema({
       temperature: String,
       time: String
    },
-   firstInject: {
-      typeVaccine: String,
-      time: String
-   },
-   secondInject: {
-      typeVaccine: String,
-      time: String
-   },
+   injectVacine:[
+      {
+         numberInject: String,
+         typeVaccine: String,
+         time: String
+      }
+   ],
    isCovid: {
       positive: String,
       time: String
-   }
+   },
+   name: String
 });
 
 covidSchema.methods.addInforCovid = function(item){

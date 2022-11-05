@@ -81,6 +81,7 @@ function renderTableSalary(data) {
 }
 // ------------------------ Check and render value in table-------------------------
 function monthDetail(element) {
+   document.getElementById("pagination").style.display = "none";
    table.tBodies[0].innerHTML = "";
    if(element.innerText === "January") {
       renderTableSalary(data[1]);
@@ -267,35 +268,38 @@ function calculateSalary(){
 
 // ------------------render all time working when load page-----------------------------
 let workOnDay = staff.workOnDay;
-let pageNumber = 1;
-let pageSize = 10;
-let tagSize = document.getElementsByName("size")[0];
+var pageNumber = 1;
+var pageSize = 10;
+let tagSize = document.getElementById("size");
 
-tagSize.addEventListener("change", convertPageSize(this.value) , false);
+// thay doi so trang
+function convertPageNumber (value){    
+   if(value){
+      pageNumber += 1;
+      renderPage(workOnDay,pageSize, pageNumber);
+   }else{
+      pageNumber -= 1;
+      if(pageNumber <= 0){ 
+         pageNumber = 1;
+         renderPage(workOnDay,pageSize, pageNumber);
+      }
+      renderPage(workOnDay,pageSize, pageNumber);
+   }
+};
+
+// thay doi so luong dong cua trang
+tagSize.addEventListener("change", function(){convertPageSize(this.value)} , false);
 
 function convertPageSize(newPageSize) {
    table.tBodies[0].innerHTML = "";
-   pageSize = newPageSize;
-   renderPage(newPageSize , pageNumber);
+   pageSize = Number(newPageSize);
+   renderPage( workOnDay, pageSize , pageNumber);
    console.log(newPageSize);
 };
-
-function convertPageNumber (value){
-   table.tBodies[0].innerHTML = "";
-   if(value){
-      pageNumber += 1;
-      console.log(pageNumber);
-      renderPage(pageSize, pageNumber);
-   }else{
-      pageNumber -= 1;
-      console.log(pageNumber);
-      renderPage(pageSize, pageNumber);
-   }
-}
-
 // -----------render result pagination on view-----------
-function renderPage( pSize, pNumber) {   
-   for(e of pagination(workOnDay, pSize , pNumber)){
+function renderPage( element ,pSize, pNumber) { 
+   table.tBodies[0].innerHTML = "";  
+   for(e of pagination(element, pSize , pNumber)){
       table.tBodies[0].innerHTML += 
       `<tr class="tr">
          <td>${new Date(e.beginWork).getDate()}</td>
@@ -323,7 +327,7 @@ function renderPage( pSize, pNumber) {
 }
 
 function workAllTime() {
-   renderPage(5 ,1);       
+   renderPage(workOnDay ,10 ,1);       
 }
 
 window.onload = workAllTime();

@@ -3,7 +3,6 @@
 <body>
    <!-- header -->
    <%- include('./includes/nav.ejs') %>
-   <!-- Main Body -->
    <main>
       <div class="container">
          <h2 style="text-align:center;">Declaration Information Covid-19</h2>
@@ -59,90 +58,9 @@
             <button type="submit" class="btn btn-primary">Submit Information</button>
          </form>
       </div>
-      <hr style="opacity: 1"/>
-      <!-- Render information covid -->
-      <div class="container">
-         <div class="row">
-            <h4>Staff's Name: <%= name %></h4>
-            <% if(data) { %> 
-            <p>Last declared hypothermia: <% if(data.hypothermia.temperature){ %> 
-               <%= data.hypothermia.temperature %>
-               <% } %>
-            </p>
-            <p>Date Last declared hypothermia: <% if(data.hypothermia.temperature){ %>
-               <%= data.hypothermia.time %>
-               <% } %>
-            </p>
-            
-            <% data.injectVacine.map((item) =>{ %>
-               <p>Vaccine inject <%= item.numberInject %> : 
-                  <%= item.typeVaccine %>
-               </p>
-               <p>Date of injection: 
-                  <%= item.time %>
-               </p>
-            <% }) %>
-            
-            <p>History of infection with covid-19:
-               <% if(data.isCovid.positive){ %>
-                  <%= data.isCovid.positive %>
-               <% } %>
-            </p>
-            <p>Time infection:
-               <% if(data.isCovid.time){ %>
-                  <%= data.isCovid.time %>
-               <% } %>
-            </p>
-            <% } %>
-         </div>
-      </div>
-
-      <!-- manager private -->
-      <% if(isManager){ %>
-         <hr style="opacity: 1"/>
-         <div class="container">
-            <h4 style="text-align: center;">Information Your Staffs</h4>
-            <hr style="opacity: 1"/>
-
-            <div class="row">
-               <% isManager.map(item => { %>
-                  <div class="col-md-6">
-                     <h4>Staff's Name: <%= item.name %></h4>
-                     <p>Last declared hypothermia: <% if(item.hypothermia.temperature){ %> 
-                        <%= item.hypothermia.temperature %>
-                        <% } %>
-                     </p>
-                     <p>Date Last declared hypothermia: <% if(item.hypothermia.temperature){ %>
-                        <%= item.hypothermia.time %>
-                        <% } %>
-                     </p>
-                     <p>Vaccine inject <%= item.numberInject %> : 
-                        <%= item.typeVaccine %>
-                     </p>
-                     <p>Date of injection: 
-                        <%= item.time %>
-                     </p>
-                     <p>History of infection with covid-19:
-                        <% if(data.isCovid.positive){ %>
-                           <%= data.isCovid.positive %>
-                        <% } %>
-                     </p>
-                     <p>Time infection:
-                        <% if(data.isCovid.time){ %>
-                           <%= data.isCovid.time %>
-                        <% } %>
-                     </p>
-                  </div>
-               <% }) %>
-            </div>
-         </div>
-      <% } %>
    </main>
 
    <!-- footer -->
    <%- include('./includes/footer.ejs') %>
-
-   <!-- JS -->
-   <script src="./covid.js"></script>
 </body>
 </html>
