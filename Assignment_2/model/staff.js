@@ -32,11 +32,13 @@ const staffSchema = new Schema({
    },
    annualLeave: {
       remainingDays: Number,
-      daysOffId: {
-         type: Schema.Types.ObjectId,
-         ref: 'dateOff',
-         require: true
-      }
+      dateOff: [
+         {
+            days: [],
+            time: Number,
+            reason: String
+         }
+      ]
    },
    department :{
       type: String,
@@ -82,21 +84,15 @@ staffSchema.methods.addWorkOnDay = function(item){
 };
 
 staffSchema.methods.addDateOffId = function(dateOff){
-   if(isNaN(dateOff) === false){
-      this.annualLeave = {...this.annualLeave , remainingDays: dateOff};
-      this.save();
+   // thoi gian nghi con lai va thong tin xin nghi
+   const remainingDays =dateOff.remainingDays
+   const listAnual = dateOff.dateOff
 
-   }else{
-      const timeOff = dateOff.dateOff[dateOff.dateOff.length - 1].time;
-      const daysOff = dateOff.dateOff[dateOff.dateOff.length - 1].days.length;
-      // tong so thời gian nghi doi ra ngay
-      const totalDayOff = (daysOff * timeOff) / 8
+   // luu data
+   this.annualLeave["dateOff"][this.annualLeave.dateOff.length] = listAnual;
+   this.annualLeave.remainingDays = remainingDays;
+   this.save();
    
-      const remainingDays =this.annualLeave.remainingDays - totalDayOff;
-
-      this.annualLeave = {daysOffId: dateOff._id , remainingDays: remainingDays};
-      this.save();
-   }
 };
 
 // ------------------Page 2 Profile methods

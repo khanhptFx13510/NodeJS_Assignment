@@ -66,5 +66,14 @@
    </div>
    <!-- footer -->
    <%- include('./includes/footer.ejs') %>
+
+   <!-- js -->
+   <script>
+      let data = <%- JSON.stringify(data) %>;
+      let annualLeave = <%- JSON.stringify(annualLeave) %>
+      let staff = <%- JSON.stringify(props) %>
+   </script>
+   
+   <script src="/salaryConfirm.js"></script>
 </body>
 </html>

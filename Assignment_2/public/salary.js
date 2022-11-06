@@ -34,10 +34,10 @@ function calculateAllTimeInDay(day) {
       ).getTime();
    }
    return totalTime;
-}
+};
 
 // check and render into cell AnnualLeave into table
-function renderAnnual (month) {
+function renderAnnual(month) {
    // parse all day annual leave of a month in new array
    let dayAnnualInMonth = [];
    for(days of annualLeave[month]){ 
@@ -48,7 +48,7 @@ function renderAnnual (month) {
    for(let i = 0; i < dayAnnualInMonth.length; i++) {
       table.tBodies[0].rows[i].cells[7].innerText = `${dayAnnualInMonth[i]}`
    }   
-}
+};
 // render value table
 function renderTableSalary(data) {
    for(let i in data){
@@ -78,7 +78,7 @@ function renderTableSalary(data) {
          </tr>`
       };
    }
-}
+};
 // ------------------------ Check and render value in table-------------------------
 function monthDetail(element) {
    document.getElementById("pagination").style.display = "none";
@@ -129,7 +129,7 @@ function monthDetail(element) {
       renderTableSalary(data[8]);
       renderAnnual(8);
       checkOverTime(8);
-      calculateSalary()
+      calculateSalary();
    }
    else if(element.innerText === "September"){
       renderTableSalary(data[9]);
@@ -232,7 +232,7 @@ function checkOverTime(month){
 function calculateSalary(){
    let salary = 0;
    // salary scale
-   const salaryScale = staff.salaryScale
+   const salaryScale = staff.salaryScale;
    // tim gia tri cua tong thoi gian lam du va lam thieu trong table
    let tTable = table.tBodies[0];
    let totalOverTime = 0;
