@@ -121,7 +121,6 @@ exports.postAnnualLeave = (req, res, next) => {
             }else{
                data.addDaysOff({daysArray , timeAnnual , reason});
                req.staff.addDateOffId(staffRemainingDays - totalDayOff);
-
             }
          })
          .then(result => {
@@ -175,10 +174,9 @@ exports.getSalary = function(req, res, next){
    let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"9":[] ,"10":[] ,"11":[] ,"12":[] };
 
    // Merge Populate Annual Leave into Staff
-   DateOff.findOne()
+   DateOff.findOne({staffId : req.staff._id})
       .populate("staffId")
       .then((staff) => {
-         // console.log(staff);
          const workOnDay = staff.staffId.workOnDay;
          // filter follow month in year
          for(e of workOnDay){
@@ -299,27 +297,38 @@ exports.getSalary = function(req, res, next){
             annualLeave[splitDay[0]].push(e);            
          }
          // find information manager
-         console.log(staff.staffId.manager);
          var nameManager = "";
-
-         Staff.findById(staff.staffId.manager)
-            .then(element => {
-               nameManager = element.name;
-               res.render('salary', {
-                  title: 'salary',
-                  props: staff.staffId,
-                  path: '/salary',
-                  data: monthInYear,
-                  annualLeave: annualLeave,
-                  nameManager: nameManager,
-               });
-            })         
+         console.log(req.staff._id);
+         console.log(staff.staffId.manager);
+         if(req.staff.manager){
+            Staff.findById(staff.staffId.manager)
+               .then(element => {
+                  nameManager = element.name;
+                  res.render('salary', {
+                     title: 'salary',
+                     props: staff.staffId,
+                     path: '/salary',
+                     data: monthInYear,
+                     annualLeave: annualLeave,
+                     nameManager: nameManager,
+                  });
+               })         
+         }else{
+            res.render('salary', {
+               title: 'salary',
+               props: staff.staffId,
+               path: '/salary',
+               data: monthInYear,
+               annualLeave: annualLeave,
+               nameManager: null,
+            });
+         }
       })
 };
 
 // Controller page 4 information Covid-19
-exports.getInfoCovid = function(req, res, next){  
-   console.log("req.staff.manager", req.staff._doc.manager);
+exports.getInfoCovid = function(req, res, next){ 
+   // is manager 
    if(!req.staff._doc.manager){
       Covid.find()
          .then(results => {
@@ -330,70 +339,68 @@ exports.getInfoCovid = function(req, res, next){
                return e._doc.staffId.toString() != req.staff._doc._id.toString()
             });
 
-            res.render('covid', {
-               title : "Covid-19",
-               path: '/covid-19',
-               data: data,
-               error: null,
-               name: req.staff.name,
-               isManager: list    
-            });
+            if(!data){
+               let item = new Covid({
+                  staffId: req.staff._doc._id,
+                  name: req.staff.name
+               });
+               item.save();
+               res.render('covid', {
+                  title : "Covid-19",
+                  path: '/covid-19',
+                  data: data,
+                  error: null,
+                  name: req.staff.name,
+                  isManager: true,
+                  staffRelate: list    
+               });
+            }else{
+               res.render('covid', {
+                  title : "Covid-19",
+                  path: '/covid-19',
+                  data: data,
+                  error: null,
+                  name: req.staff.name,
+                  isManager: true,
+                  staffRelate: list
+               });
+            }            
          })
          .catch((err) => {
             console.log("error: ", err);
          })
+   }else{
+      // not manager
+      Covid.findOne({staffId: req.staff._id})
+         .then(result => {
+            if(!result){
+               const item = new Covid({
+                  staffId: req.staff._id,
+                  name: req.staff.name
+               });
+               item.save();
+               res.render('covid', {
+                  title : "Covid-19",
+                  path: '/covid-19',
+                  data: item,
+                  error: null,
+                  name: req.staff.name,
+                  isManager: false,
+                  staffRelate: []   
+               });
+            }else{
+               res.render('covid', {
+                  title : 'covid-19',
+                  path: '/covid-19',
+                  data: result,
+                  error: null,
+                  name: req.staff.name,
+                  isManager: false,
+                  staffRelate: []
+               });               
+            }
+         })
    }
-
-   // Covid.findOne({staffId: req.staff._id})
-   //    .then(result => {
-   //       if(!result){
-   //          const item = new Covid({
-   //             staffId: req.staff._id,
-   //             name: req.staff.name
-   //          });
-   //          item.save();
-   //          if(req.staff.manager){
-   //             res.render('covid', {
-   //                title : "Covid-19",
-   //                path: '/covid-19',
-   //                data: item,
-   //                error: null,
-   //                name: req.staff.name,
-   //                isManager: null    
-   //             });
-   //          } else{
-   //             res.render('covid', {
-   //                title : "Covid-19",
-   //                path: '/covid-19',
-   //                data: item,
-   //                error: null,
-   //                name: req.staff.name,
-   //                isManager: "yes"    
-   //             });
-   //          }  
-   //       }else{
-   //          if(req.staff.manager){
-   //             res.render('covid', {
-   //                title : 'covid-19',
-   //                path: '/covid-19',
-   //                data: result,
-   //                error: null,
-   //                name: req.staff.name,
-   //                isManager: null
-   //             });               
-   //          }else{
-   //             res.render('covid', {
-   //                title : "Covid-19",
-   //                path: '/covid-19',
-   //                data: result,
-   //                error: null,
-   //                name: req.staff.name,
-   //                isManager: "yes"    
-   //             });
-   //          };
-   //       }
-   //    })
-
 };
 
 // -----------post covid-------------
@@ -437,6 +444,7 @@ exports.postInfoCovid = function(req, res, next){
                   time: dateCovidStatus
                }
             };
+            covid.save();
             let data = covid;
             
             if(req.staff.manager){
@@ -449,58 +457,21 @@ exports.postInfoCovid = function(req, res, next){
                   isManager: null             
                })           
             }else{
-               res.render('covid' , {
-                  path: '/covid-19',
-                  title: "covid information",
-                  error: null,
-                  data: data,
-                  name: req.staff.name,
-                  isManager: !null             
-               })
+               res.redirect('/covid-19')
             }
-            covid.save();
          })   
    } else{
-      Covid.findOne(req.staff._id)
-         .then(covid => {
-            let data = covid;
-            if(req.staff.manager){
-               res.render('covid-manager' , {
-                  path: '/covid-19',
-                  title: "covid information",
-                  error: "not enought information to save",
-                  data: data,
-                  name: req.staff.name,
-                  isManager: null,             
-               })
-               
-            }else{
-               res.render('covid' , {
-                  path: '/covid-19',
-                  title: "covid information",
-                  error: "not enought information to save",
-                  data: data,
-                  name: req.staff.name,
-                  isManageable: !null             
-               })
-            }
-         })
+      res.redirect('/covid-19');
    }
 };
 
 // ---------Print file PDF----
 exports.getPdf = function(req, res, next){
-   const orderId = req.params.orderId;
-    Covid.findById(orderId)
+   const covidId = req.params.covidId;
+   Covid.findById(covidId)
       .then((order) => {
-         if (!order) {
-               return next(new Error('No order found.'));
-         }
-         if (order.user.userId.toString() !== req.user._id.toString()) {
-               return next(new Error('Unauthorized user.'));
-         }
-         const invoiceName = 'invoice-' + orderId + '.pdf';
-         const invoicePath = path.join('data', 'invoices', invoiceName);
+         const invoiceName = 'invoice-' + covidId + '.pdf';
+         const invoicePath = path.join('data', invoiceName);
 
          const pdfDoc = new PDFDocument();
          res.setHeader('Content-Type', 'application/pdf');
@@ -511,9 +482,181 @@ exports.getPdf = function(req, res, next){
          pdfDoc.pipe(fs.createWriteStream(invoicePath));
          pdfDoc.pipe(res);
 
-         pdfDoc.text('Hello World!');
+         pdfDoc.fontSize(26).text('Covid-19 Information', {
+            underline: true,
+        });
+         pdfDoc.text('---------------------');
 
+         pdfDoc.fontSize(14).text('Name staff: ' + order.name );
+         pdfDoc.fontSize(14).text(
+            `Last declared hypothermia: ${order.hypothermia.temperature} degrees C
+Last date declared hypothermia: ${order.hypothermia.time}`
+         );
+         order.injectVacine.map(element => {
+            return pdfDoc.fontSize(14).text(`Vaccine inject ${element.numberInject} : ${element.typeVaccine}
+Date of injection : ${element.time}`)
+         })
+         pdfDoc.fontSize(14).text(`History of infection with covid-19: ${order.isCovid.positive}`)
+         pdfDoc.fontSize(14).text(`Time infection:: ${order.isCovid.time}`)
+
+         pdfDoc.text('---------------------');
          pdfDoc.end();
       })
       .catch((err) => next(err));
 };
+
+// -------------------------------------- page 5------------------------------------------------
+exports.getConform = function(req, res, next){
+   Staff.find()
+      .then(staffs => {
+         manyStaff = staffs.filter(staff => {
+            return staff.manager === req.staff._id.toString();
+         });
+
+         res.render('conform',{
+            title: "conform",
+            path: '/conform',
+            staffs : manyStaff
+         })         
+      })
+};
+
+// forcus staff con form
+exports.showDetailConform = function(req, res, next){
+   const staffId = req.params.staffId;
+   // create an object that stores data by month and day
+   let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
+
+   // sap xep ngay dang ki nghi theo thang
+   let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"9":[] ,"10":[] ,"11":[] ,"12":[] };
+
+   DateOff.findOne({staffId: staffId})
+      .then(data => console.log(data))
+      // .populate("staffId")
+      // .then((staff) => {
+      //    const workOnDay = staff.staffId.workOnDay;
+      //    // filter follow month in year
+      //    for(e of workOnDay){
+      //       let dayKey = new Date(e.beginWork).getDate();
+      //       // January
+      //       if(new Date(e.beginWork).getMonth() === 0){
+      //          if(dayKey in monthInYear[1]){
+      //             monthInYear[1][dayKey].push(e);
+      //          } else{
+      //             monthInYear[1][dayKey] = [e];
+      //          }
+      //       }
+      //       // February
+      //       if(new Date(e.beginWork).getMonth() === 1){
+
+      //          if(dayKey in monthInYear[2]){
+      //             monthInYear[2][dayKey].push(e);
+      //          } else{
+      //             monthInYear[2][dayKey] = [e];
+      //          }
+      //       }
+      //       // March
+      //       if(new Date(e.beginWork).getMonth() === 2){
+
+      //          if(dayKey in monthInYear[3]){
+      //             monthInYear[3][dayKey].push(e);
+      //          } else{
+      //             monthInYear[3][dayKey] = [e];
+      //          }
+      //       }
+      //       // April
+      //       if(new Date(e.beginWork).getMonth() === 3){
+
+      //          if(dayKey in monthInYear[4]){
+      //             monthInYear[4][dayKey].push(e);
+      //          } else{
+      //             monthInYear[4][dayKey] = [e];
+      //          }
+      //       }
+      //       // May
+      //       if(new Date(e.beginWork).getMonth() === 4){
+
+      //          if(dayKey in monthInYear[5]){
+      //             monthInYear[5][dayKey].push(e);
+      //          } else{
+      //             monthInYear[5][dayKey] = [e];
+      //          }
+      //       }
+      //       // June
+      //       if(new Date(e.beginWork).getMonth() === 5){
+
+      //          if(dayKey in monthInYear[6]){
+      //             monthInYear[6][dayKey].push(e);
+      //          } else{
+      //             monthInYear[6][dayKey] = [e];
+      //          }
+      //       }
+      //       // July
+      //       if(new Date(e.beginWork).getMonth() === 6){
+
+      //          if(dayKey in monthInYear[7]){
+      //             monthInYear[7][dayKey].push(e);
+      //          } else{
+      //             monthInYear[7][dayKey] = [e];
+      //          }
+      //       }
+      //       // August
+      //       if(new Date(e.beginWork).getMonth() === 7){
+
+      //          if(dayKey in monthInYear[8]){
+      //             monthInYear[8][dayKey].push(e);
+      //          } else{
+      //             monthInYear[8][dayKey] = [e];
+      //          }
+      //       }
+      //       // September
+      //       if(new Date(e.beginWork).getMonth() === 8){
+
+      //          if(dayKey in monthInYear[9]){
+      //             monthInYear[9][dayKey].push(e);
+      //          } else{
+      //             monthInYear[9][dayKey]= [e]
+      //          }
+      //       }
+      //       // October
+      //       if(new Date(e.beginWork).getMonth() === 9){
+
+      //          if(dayKey in monthInYear[10]){
+      //             monthInYear[10][dayKey].push(e);
+      //          } else{
+      //             monthInYear[10][dayKey] = [e];
+      //          }
+      //       }
+      //       // November
+      //       if(new Date(e.beginWork).getMonth() === 10){
+
+      //          if(dayKey in monthInYear[11]){
+      //             monthInYear[11][dayKey].push(e);
+      //          } else{
+      //             monthInYear[11][dayKey] = [e];
+      //          }
+      //       }
+      //       // December
+      //       if(new Date(e.beginWork).getMonth() === 11){
+
+      //          if(dayKey in monthInYear[12]){
+      //             monthInYear[12][dayKey].push(e);
+      //          } else{
+      //             monthInYear[12][dayKey] = [e];
+      //          }
+      //       }
+      //    };
+
+      //    // filter annualLeave follow month
+      //    const dateOff = staff.dateOff;
+      //    for(e of dateOff){
+      //       let splitDay = e.days[0].split("/");
+      //       annualLeave[splitDay[0]].push(e);            
+      //    }
+      // })
+
+   res.render('detailConform', {
+      title: 'Staff Detail',
+      path: '/conform/' + staffId,
+   })
+}

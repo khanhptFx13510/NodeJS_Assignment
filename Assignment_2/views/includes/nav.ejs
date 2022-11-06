@@ -21,10 +21,16 @@
                   <li class="nav-item">
                      <a class="nav-link <%= path === '/salary' ? 'active' : '' %>" href="/salary">Salary</a>
                   </li>
+                  <% if(isManager){ %>
+                     <li class="nav-item">
+                        <a class="nav-link <%= path === '/conform' ? 'active' : '' %>" href="/conform">Manager Conform</a>
+                     </li>
+                  <% } %>
                   <li class="nav-item">
                      <a class="nav-link <%= path === '/covid-19' ? 'active' : '' %>" href="/covid-19">Covid-19</a>
                   </li>
-               <% } %>
+               <% } %>            
+
                <% if (!isAuthenticated) { %>
                <li class="nav-item">
                   <a class="nav-link <%= path === '/login' ? 'active' : '' %>" href="/login">login</a>

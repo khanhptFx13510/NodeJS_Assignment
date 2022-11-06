@@ -14,29 +14,34 @@ exports.postLogin = (req, res, next) => {
    const email = req.body.email;
    const password = req.body.password;
 
-   console.log(email, password);
-   // console.log("req = " , req);
-   
+   console.log(email, password);   
    Staff.findOne({email: email})
       .then((staff) => {
-         console.log(staff.password === password);
-
+         // console.log(staff.password === password);
          if(!staff){
             return res.redirect("/login");
          } else {
             if(staff.password === password){
-               console.log(1);
                req.session.isLoggedIn = true;
                req.session.staff = staff;
-               req.session.save(err => {
-                  console.log(err);
-               });
-               return res.redirect('/');
+
+               if(!staff.manager){
+                  req.session.manager = true;
+                  req.session.save(err => {
+                     console.log(err);
+                  });
+                  return res.redirect('/');
+               }else{
+                  req.session.save(err => {
+                     console.log(err);
+                  });
+                  return res.redirect('/');
+               }
+            }else{
+               res.redirect('/login');
             }
-            res.redirect('/login');
          }
       })
-
 };
 
 exports.postLogout = (req, res, next) => {

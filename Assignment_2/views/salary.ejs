@@ -83,10 +83,12 @@
             </div>
          </div>  
          <!-- render information manager -->
-         <div class="row" style="border: 1px double green; background-color: green; color: white">
-            <h4>Administrator: <%= nameManager %></h4>
-            <h4>Administrator Id: <%= props.manager %></h4>
-         </div>
+         <% if(nameManager) { %>
+            <div class="row" style="border: 1px double green; background-color: green; color: white">
+               <h4>Administrator: <%= nameManager %></h4>
+               <h4>Administrator Id: <%= props.manager %></h4>
+            </div>
+         <% } %>
       </div>
    </main>
 

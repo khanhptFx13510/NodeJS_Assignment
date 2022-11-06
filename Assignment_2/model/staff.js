@@ -56,7 +56,8 @@ const staffSchema = new Schema({
          },
          workPlace: {
             type: String
-         }
+         },
+         isConfirm: Boolean
       }
    ],
    manager: Schema.Types.Mixed

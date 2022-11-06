@@ -87,7 +87,11 @@ app.use((req ,res , next) => {
 // truyen du lieu xac thuc cho tat ca cac page yeu cau 
 app.use((req, res, next)=>{
   res.locals["isAuthenticated"] = req.session.isLoggedIn;
-  
+  if(req.session.manager){
+    res.locals["isManager"] = req.session.manager;
+  }else{
+    res.locals["isManager"] = false;
+  }
   next();
 });
 

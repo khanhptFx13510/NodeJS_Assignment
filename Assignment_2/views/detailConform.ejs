@@ -1,0 +1,70 @@
+<%- include('./includes/header.ejs') %>
+</head>
+<body>
+   <!-- navigation -->
+   <%- include('./includes/nav.ejs') %>
+   <div class="container">
+      <div class="row">
+         <h5>Choose month:</h5>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            January</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)" >
+            February</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            March</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            April</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            May</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            June</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            July</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            August</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            September</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            October</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            November</button>
+         <button class="btn btn-secondary col-md-1" onclick="monthDetail(this)">
+            December</button>
+         <h3 style="text-align:center; color: white ; background-color: green; margin: 2px 0">Detailed Information Sheet</h3>
+
+         <!-- table salary -->
+         <table class="table" id="salary-table" style="margin-bottom: 0;">
+            <thead>
+               <tr class="tr">
+                  <th>Date</th>
+                  <th>Register Time</th>
+                  <th>End Time</th>
+                  <th>Caculate Time</th>
+                  <th>Work Place</th>
+                  <th>Over Time</th>
+                  <th>Lack Of Working Time</th>
+                  <th>Annual Leave</th>
+               </tr>
+            </thead>       
+            <tbody>
+
+            </tbody>
+         </table>
+         <!-- calculate Salary -->
+         <div style="border: 1px solid ; text-align: center; background-color: aquamarine;
+         padding: 0;">
+            <h5 style="margin: auto; border-bottom: 1px solid;">
+               Salary Calculation Formula: 
+               Salary = salaryScale * 3000000 + (overTime - Lack Of Working Time) * 200000
+            </h5>
+            <h5 id="salary">
+
+            </h5>
+         </div>
+
+      </div>
+   </div>
+   <!-- footer -->
+   <%- include('./includes/footer.ejs') %>
+</body>
+</html>

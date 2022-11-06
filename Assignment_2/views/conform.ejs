@@ -1,0 +1,33 @@
+<%- include('./includes/header.ejs') %>
+</head>
+<body>
+   <!-- header -->
+   <%- include('./includes/nav.ejs') %>
+   <main>
+      <div class="container">
+         <h2 style="text-align:center;">All employees you manage</h2>
+         <div class="row">
+            <% staffs.map(staff =>{ %>
+               <div class="col-lg-4">
+                  <div class="card" style="width: 100%;">
+                     <img src="<%= staff.image %>" class="card-img-top">
+                     <div class="card-body">
+                        <h5 class="card-title">Staff name: <%= staff.name %></h5>
+                        <p class="card-text">
+                           staffId: <%= staff._id %>
+                        </p>
+                        <a href="/conform/<%= staff._id %>" class="btn btn-primary">
+                           Staff Detail
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            <% }) %>
+         </div>   
+      </div>
+   </main>
+
+   <!-- footer -->
+   <%- include('./includes/footer.ejs') %>
+</body>
+</html>
