@@ -148,6 +148,15 @@ exports.postImageProfile = function(req, res, next){
 }
 
 // Controller page 3 salary---------------------------------------------------------------------
+// convert daykey function
+function convertDayKey(e){
+   if(e < 10){
+      return '0'+ e
+   }else{
+      return e
+   };
+};
+
 exports.getSalary = function(req, res, next){
    // create an object that stores data by month and day
    let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
@@ -161,7 +170,7 @@ exports.getSalary = function(req, res, next){
          const workOnDay = staff.workOnDay;
          // filter follow month in year
          for(e of workOnDay){
-            let dayKey = new Date(e.beginWork).getDate();
+            let dayKey = convertDayKey(new Date(e.beginWork).getDate());
             // January
             if(new Date(e.beginWork).getMonth() === 0){
                if(dayKey in monthInYear[1]){
@@ -281,7 +290,7 @@ exports.getSalary = function(req, res, next){
          var nameManager = "";
 
          if(req.staff.manager){
-            Staff.findById(staff.staffId.manager)
+            Staff.findOne({role: "admin"})
                .then(element => {
                   nameManager = element.name;
                   res.render('salary', {
@@ -510,12 +519,12 @@ exports.showDetailConform = function(req, res, next){
    // sap xep ngay dang ki nghi theo thang
    let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"9":[] ,"10":[] ,"11":[] ,"12":[] };
 
-   Staff.findById(req.staff._id)
+   Staff.findById(staffId)
       .then((staff) => {
          const workOnDay = staff.workOnDay;
          // filter follow month in year
          for(e of workOnDay){
-            let dayKey = new Date(e.beginWork).getDate();
+            let dayKey = convertDayKey(new Date(e.beginWork).getDate());
             // January
             if(new Date(e.beginWork).getMonth() === 0){
                if(dayKey in monthInYear[1]){
@@ -632,7 +641,7 @@ exports.showDetailConform = function(req, res, next){
             annualLeave[splitDay[0]].push(e);            
          };
 
-         console.log("annualLeave", annualLeave);
+         console.log("annualLeave", dateOff);
          
          res.render('detailConform', {
             title: 'salary Detail',

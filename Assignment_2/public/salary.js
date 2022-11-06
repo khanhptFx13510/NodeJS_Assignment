@@ -25,9 +25,9 @@ function calculateTime(timeWork) {
    }
 }
 // calculate all time work in a day
-function calculateAllTimeInDay(day) {  
+function calculateAllTimeInDay(d){  
    let totalTime = 0;
-   for(let i of day) {
+   for(let i of d) {
       totalTime += new Date(
          new Date(i.endWork).getTime() - 
          new Date(i.beginWork).getTime()
@@ -50,12 +50,21 @@ function renderAnnual(month) {
    }   
 };
 // render value table
+function convertGetDate (time){
+   if(Number(time) < 10){
+      return "0" + time
+   }else{
+      return time
+   }
+};
+
 function renderTableSalary(data) {
    for(let i in data){
       for(day of data[i]){
+         
          table.tBodies[0].innerHTML += 
          `<tr class="tr">
-            <td>${new Date(day.beginWork).getDate()}</td>
+            <td>${convertGetDate(new Date(day.beginWork).getDate())}</td>
             <td>
                ${new Date(day.beginWork).getHours()}:
                ${new Date(day.beginWork).getMinutes()}:
@@ -172,7 +181,7 @@ function checkOverTime(month){
 
    // ----tinh thoi gian duoc nghi trong annualLeave
    let timeOfDateAnnual = {};
-   for(days of annualLeave[month]){ 
+   for(days of annualLeave[month]){
       for(day of days.days){
          let keyOfAnnualLeave = day.split("/")[1]
          timeOfDateAnnual[keyOfAnnualLeave] = days.time
@@ -189,6 +198,9 @@ function checkOverTime(month){
       `
       // check annual leave neu staff co xin nghi ngay nao thi - vao thoi gian lam thieu cua nhan vien
       if(!timeOfDateAnnual[j]){
+         console.log(j)
+         console.log(timeOfDateAnnual[j])
+         console.log(daySamedate[j])
          // check time working enough 8 hours or not
          let timeRemaining = 0
          if(timeWorkOnDay <= 8*60*60*1000){
