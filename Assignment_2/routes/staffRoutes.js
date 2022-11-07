@@ -27,6 +27,8 @@ router.post('/covid-19', isAuth, staffController.postInfoCovid);
 router.get('/conform', isAuth, isManager, staffController.getConform);
 router.get('/conform/:staffId', isAuth , isManager, staffController.showDetailConform);
 
+router.post('/conform/:staffId', isAuth, isManager ,staffController.postDetailConform);
+
 // http://localhost:3001/conform/635cbdfd7091a7ab9ca66042
 // http://localhost:3001/conform/color.css
 

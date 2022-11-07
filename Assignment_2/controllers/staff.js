@@ -510,6 +510,37 @@ exports.getConform = function(req, res, next){
       })
 };
 
+// post 
+exports.postDetailConform = function(req, res, next) {   
+   // set up response type
+   res.setHeader('Content-Type', 'application/json');
+   let staffId = req.params.staffId;
+   let element = req.body;
+   
+   Staff.findById(staffId)
+      .then(staff =>{
+         if(element.time){
+            let newData = staff.workOnDay.filter(work => 
+               new Date(work.beginWork).getTime() !== element.time
+            );
+            staff.workOnDay = newData;
+            staff.save();
+            return  
+         }else if(element.thang){
+            staff.workOnDay.filter(work =>
+               new Date(work.beginWork).getMonth() === element.thang - 1
+            ).forEach(e =>{
+               e["isConfirm"] = true
+            });
+
+            staff.save();
+            return
+         }
+      })
+   // send response data
+   res.end();
+};
+
 // forcus staff con form
 exports.showDetailConform = function(req, res, next){
    const staffId = req.params.staffId;
@@ -525,6 +556,7 @@ exports.showDetailConform = function(req, res, next){
          // filter follow month in year
          for(e of workOnDay){
             let dayKey = convertDayKey(new Date(e.beginWork).getDate());
+            // console.log(dayKey);
             // January
             if(new Date(e.beginWork).getMonth() === 0){
                if(dayKey in monthInYear[1]){
@@ -641,8 +673,7 @@ exports.showDetailConform = function(req, res, next){
             annualLeave[splitDay[0]].push(e);            
          };
 
-         console.log("annualLeave", dateOff);
-         
+         // console.log("annualLeave", dateOff);         
          res.render('detailConform', {
             title: 'salary Detail',
             props: staff,

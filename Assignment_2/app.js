@@ -52,13 +52,15 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(null, false);
   }
-}
+};
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(
   multer({ storage: fileStorage , fileFilter: fileFilter}).single('image')
 );
+app.use(express.json());
 
 app.use(
   session({ 
@@ -105,18 +107,6 @@ mongoose.connect(
 )
 .then(result => {
   Staff.findOne().then((staff) => {
-    // if(!staff){
-    //   const staff = new Staff({
-    //     name: 'Messi',
-    //     dOB: new Date("1992-9-16"),
-    //     salaryScale: 1.5,
-    //     image: "https://vnn-imgs-f.vgcloud.vn/2020/08/23/11/dien-vien-anh-thu-tiet-lo-nguyen-nhan-ly-hon-chong-cu.jpg",
-    //     annualLeave: 3,
-    //     department: "Sale",
-    //     startDate: new Date("2022-9-12")
-    //   });
-    //   staff.save()
-    // }
     app.listen(3001, () => {
       console.log(`Example app listening on port ${3001}`)
     })

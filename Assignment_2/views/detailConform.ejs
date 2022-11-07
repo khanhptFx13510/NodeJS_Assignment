@@ -60,6 +60,10 @@
             <h5 id="salary">
 
             </h5>
+            <button style="width: 100%; font-size: 24px;" class="btn btn-danger" 
+               onclick="confirmSalary()">
+               Confirm your staff's salary
+            </button>
          </div>
 
       </div>
@@ -73,7 +77,7 @@
       let annualLeave = <%- JSON.stringify(annualLeave) %>
       let staff = <%- JSON.stringify(props) %>
    </script>
-   
+
    <script src="/salaryConfirm.js"></script>
 </body>
 </html>
