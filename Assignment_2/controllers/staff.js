@@ -159,10 +159,10 @@ function convertDayKey(e){
 
 exports.getSalary = function(req, res, next){
    // create an object that stores data by month and day
-   let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
+   let monthInYear = { "1":{} ,"2":{} ,"3":{} ,"4":{} ,"5":{} ,"6":{} ,"7":{} ,"8":{} ,"9":{} ,"10":{} ,"11":{} ,"12":{} };
 
    // sap xep ngay dang ki nghi theo thang
-   let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"9":[] ,"10":[] ,"11":[] ,"12":[] };
+   let annualLeave = { "1":[] ,"2":[] ,"3":[] ,"4":[] ,"5":[] ,"6":[] ,"7":[] ,"8":[],"9":[] ,"10":[] ,"11":[] ,"12":[] };
    
    // send data to client
    Staff.findById(req.staff._id)

@@ -34,10 +34,11 @@ const Staff = require('./model/staff');
 
 // Link to come Store save file image
 const fileStorage = multer.diskStorage({
+  // create adress to come
   destination: (req, file, cb) => {
       cb(null, 'images');
   },
-  filename: (req, file, cb) => {
+  filename: (req, file, cb) => { // create file img name
       cb(null, Date.now().toString() + '-' + file.originalname);
   },
 });
@@ -57,9 +58,11 @@ const fileFilter = (req, file, cb) => {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(bodyParser.urlencoded({extended: false}));
+
 app.use(
   multer({ storage: fileStorage , fileFilter: fileFilter}).single('image')
 );
+
 app.use(express.json());
 
 app.use(
